@@ -1,24 +1,35 @@
-#include <math.h>
 #include <stdbool.h>
+#include <stdio.h>
+
+#define _USE_MATH_DEFINES
+#include <math.h>
 
 #include "geometric_prim.h"
 
 vector2* zeroVector(void)
 {
-    vector2 vector = {0, 0};
+    vector2* vector = {0};
 
-    return &vector;
+    return vector;
+}
+
+float vectorMagnitude(vector2* vector) // vector's "norme"
+{
+    float vectMag = sqrtf(powf(vector->x, 2) + powf(vector->y, 2));
+
+    return vectMag;
 }
 
 vector2* unitVector(vector2* vector)
 {
     vector2* vectUnit;
+    float vectMag = vectorMagnitude(vector);
 
-    if (vectorMagnitude(vector) == 0)
+    if (vectMag == 0)
         return NULL;
 
-    vectUnit->x = vector->x / vectorMagnitude(vector);
-    vectUnit->y = vector->y / vectorMagnitude(vector);
+    vectUnit->x = vector->x / vectMag;
+    vectUnit->y = vector->y / vectMag;
 
     return vectUnit;
 }
@@ -39,13 +50,6 @@ bool compareVector(vector2* vectorA, vector2* vectorB)
         equal = false;
 
     return equal;
-}
-
-float vectorMagnitude(vector2* vector) // vector's "norme"
-{
-    float vectMag = sqrtf(powf(vector->x, 2) + powf(vector->y, 2));
-
-    return vectMag;
 }
 
 float squareMagnitude(vector2* vector)
@@ -109,9 +113,52 @@ float dotProduct(vector2* vectorA, vector2* vectorB)
     return dot;
 }
 
-float angle(vector2* vectorA, vector2* vectorB)
+float angle(vector2* vectorA, vector2* vectorB) // angle between 2 vectors
 {
     float angle = acosf(dotProduct(vectorA, vectorB) / (vectorMagnitude(vectorA) * vectorMagnitude(vectorB)));
 
     return angle;
+}
+
+void* vect_rotate(vector2* vector)
+{
+    float angle;
+    float x = vector->x;
+    float y = vector->y;
+
+    vector->x = x * cosf(angle) - y * sinf(angle);
+    vector->y = x * sinf(angle) + y * cosf(angle);
+}
+
+void* pt_rotate(vector2* origin, vector2* vector)
+{
+    float angle;
+    float x = vector->x;
+    float y = vector->y;
+    vector2* vector1;
+    /*
+    float r = sqrtf(powf(vector->x, 2) + powf(vector->y, 2));
+
+    vector1->x = r * cosf(angle);
+    vector1->y = r * sinf(angle);
+    */
+    vector1->x = origin->x * (x * cosf(angle) - y * sinf(angle));
+    vector1->y = origin->y * (x * sinf(angle) + y * cosf(angle));
+}
+
+void* right_angle_rotation(vector2* vector)
+{
+    float angle = M_PI / 2.f;
+    float x = vector->x;
+    float y = vector->y;    
+
+    vector->x = - y;
+    vector->y = x; 
+}
+
+vector2* normalVector(vector2* vector)
+{
+    vector2* vector1 = right_angle_rotation(vector);
+
+    return vector1;
 }

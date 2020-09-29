@@ -9,7 +9,7 @@ typedef struct vector2
 typedef struct line
 {
     float pt;
-    vector2 unitpt;
+    vector2 unitPt;
 } line;
 
 typedef struct segment
@@ -53,3 +53,9 @@ typedef struct referential2
     vector2 j;
     float angle;
 } referential2;
+
+typedef struct range
+{
+    float min;
+    float max;
+} range;
