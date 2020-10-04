@@ -4,6 +4,7 @@ void locToGlobPos(referential2 local, point2* pt)
 {
     vector2 locOrigin = {local.origin.x, local.origin.y};
     vector2 OP = addition(locOrigin, scale(local.i, pt->x));
+    OP = addition(OP, scale(local.j, pt->y));
     pt->x = OP.x;
     pt->y = OP.y;
 }

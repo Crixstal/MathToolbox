@@ -17,7 +17,8 @@ typedef struct vector2
 
 typedef struct line
 {
-    point2 pt;
+    point2 base;
+    vector2 vectDir;
 } line;
 
 typedef struct segment
@@ -35,8 +36,8 @@ typedef struct circle
 typedef struct rect
 {
     point2 center;
-    float halfHeight ;
-    float halfWidth ;
+    float halfHeight;
+    float halfWidth;
 } rect;
 
 typedef struct orientedRect
@@ -81,13 +82,39 @@ float dotProduct(vector2 vectorA, vector2 vectorB);
 
 // VECTORS AND ANGlE
 float angle(vector2 vectorA, vector2 vectorB);
-void vectRotate(vector2* vector, float angle);
-void ptRotate(point2* origin, point2* point, float angle);
-void rightAngleRotation(vector2* vector);
-vector2 normalVector(vector2* vector);
+void vectRotate(vector2 vector, float angle);
+void ptRotate(point2 origin, point2 point, float angle);
+void rightAngleRotation(vector2 vector);
+vector2 normalVector(vector2 vector);
 
 // CHANGE OF REFERENTIAL
 void locToGlobPos(referential2 local, point2* pt);
 void globToLocPos(referential2 local, point2* pt);
 void locToGlobVect(referential2 local, vector2* vect);
 void globToLocVect(referential2 local, vector2* vect);
+
+// RANGE
+float getMin(float a, float b);
+float getMax(float a, float b);
+range globalRange(range rng1, range rng2);
+range globRngVal(range rng, float a);
+bool rangeOverlap(range rng1, range rng2);
+range ptOnAxisRng(point2 pt, vector2 vect);
+range segOnAxisRng(segment seg, vector2 vect);
+range boxOnAxisRng(rect box, vector2 vect);
+range circleOnAxisRng(vector2 vect);
+
+// BINARY DETECTION
+bool Point_Point(point2 pt1, point2 pt2);
+bool Point_Line(point2 pt, line line);
+bool Point_Segment(point2 pt, segment seg);
+bool Point_Circle(point2 pt, circle circle);
+bool Point_Box(point2 pt, rect box);
+bool Line_Line(line line1, line line2);
+bool Line_Segment(line line1, segment seg);
+bool Line_Circle(line line1, circle circle);
+bool Segment_Segment(segment seg1, segment seg2);
+bool Segment_Circle(segment seg, circle circle);
+bool Circle_Circle(circle circle1, circle circle2);
+bool Circle_Box(circle circle, rect box);
+bool Box_Box(rect box1, rect box2);

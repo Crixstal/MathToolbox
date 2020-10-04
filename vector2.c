@@ -126,36 +126,36 @@ float angle(vector2 vectorA, vector2 vectorB) // angle between 2 vectors
     return angle;
 }
 
-void vectRotate(vector2* vector, float angle) // angle in radian
+void vectRotate(vector2 vector, float angle) // angle in radian
 {
-    float x = vector->x;
+    float x = vector.x;
 
-    vector->x = x * cosf(angle) - vector->y * sinf(angle);
-    vector->y = x * sinf(angle) + vector->y * cosf(angle);
+    vector.x = x * cosf(angle) - vector.y * sinf(angle);
+    vector.y = x * sinf(angle) + vector.y * cosf(angle);
 }
 
-void ptRotate(point2* origin, point2* point, float angle)
+void ptRotate(point2 origin, point2 point, float angle)
 {
-    vector2 vect = {point->x - origin->x, point->y - origin->y};
+    vector2 vect = {point.x - origin.x, point.y - origin.y};
 
-    vectRotate(&vect, angle);
+    vectRotate(vect, angle);
 
-    point->x = vect.x + origin->x;
-    point->y = vect.y + origin->y;
+    point.x = vect.x + origin.x;
+    point.y = vect.y + origin.y;
 }
 
-void rightAngleRotate(vector2* vector)
+void rightAngleRotate(vector2 vector)
 { 
-    float x = vector->x;
+    float x = vector.x;
 
-    vector->x = - vector->y;
-    vector->y = x; 
+    vector.x = - vector.y;
+    vector.y = x; 
 }
 
-vector2 normalVector(vector2* vector)
+vector2 normalVector(vector2 vector)
 {
-    vector2 rotVect = {vector->x, vector->y};
-    rightAngleRotate(&rotVect);
+    vector2 rotVect = {vector.x, vector.y};
+    rightAngleRotate(rotVect);
 
     return rotVect;
 }
