@@ -2,6 +2,8 @@
 
 #include <stdbool.h>
 
+#define E 1.401298E-45
+
 // GEOMETRICAL STRUCTURES
 typedef struct point2
 {
@@ -82,9 +84,9 @@ float dotProduct(vector2 vectorA, vector2 vectorB);
 
 // VECTORS AND ANGlE
 float angle(vector2 vectorA, vector2 vectorB);
-void vectRotate(vector2 vector, float angle);
-void ptRotate(point2 origin, point2 point, float angle);
-void rightAngleRotation(vector2 vector);
+vector2 vectRotate(vector2 vector, float angle);
+point2 ptRotate(point2 origin, point2 point, float angle);
+vector2 rightAngleRotation(vector2 vector);
 vector2 normalVector(vector2 vector);
 
 // CHANGE OF REFERENTIAL
@@ -110,11 +112,19 @@ bool Point_Line(point2 pt, line line);
 bool Point_Segment(point2 pt, segment seg);
 bool Point_Circle(point2 pt, circle circle);
 bool Point_Box(point2 pt, rect box);
+
 bool Line_Line(line line1, line line2);
 bool Line_Segment(line line1, segment seg);
 bool Line_Circle(line line1, circle circle);
+
 bool Segment_Segment(segment seg1, segment seg2);
 bool Segment_Circle(segment seg, circle circle);
+
 bool Circle_Circle(circle circle1, circle circle2);
 bool Circle_Box(circle circle, rect box);
+
 bool Box_Box(rect box1, rect box2);
+
+bool ConvexPolygon_Point(point2 pt, convexPolygon poly);
+bool ConvexPolygon_ConvexPolygon(convexPolygon poly1, convexPolygon poly2);
+bool ConvexPolygon_Circle(convexPolygon poly, circle circle);

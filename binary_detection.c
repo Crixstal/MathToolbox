@@ -5,19 +5,15 @@
 
 bool Point_Point(point2 pt1, point2 pt2)
 {
-    const int e = 1.401298E-45;
-
-    return (fabs(pt1.x - pt2.x) < e && fabs(pt1.y - pt2.y) < e);
+    return (fabs(pt1.x - pt2.x) < E && fabs(pt1.y - pt2.y) < E);
 }
 
 bool Point_Line(point2 pt, line line)
 {
-    const int e = 1.401298E-45;
-
     vector2 normal = normalVector(line.vectDir);
     vector2 bP = {pt.x - line.base.x, pt.y - line.base.y};
 
-    return (fabs(dotProduct(bP, normal)) < e);
+    return (fabs(dotProduct(bP, normal)) < E);
 }
 
 bool Point_Segment(point2 pt, segment seg) // check
@@ -36,7 +32,8 @@ bool Point_Circle(point2 pt, circle circle)
 
 bool Point_Box(point2 pt, rect box)
 {
-
+    return (pt.x <= box.center.x + box.halfWidth && pt.x >= box.center.x - box.halfWidth
+             && pt.y <= box.center.y + box.halfHeight && pt.y >= box.center.y - box.halfHeight);
 }
 
 bool Line_Line(line line1, line line2)
@@ -92,4 +89,19 @@ bool Circle_Box(circle circle, rect box)
 bool Box_Box(rect box1, rect box2)
 {
 
+}
+
+bool ConvexPolygon_Point(point2 pt, convexPolygon poly)
+{
+
+}
+
+bool ConvexPolygon_ConvexPolygon(convexPolygon poly1, convexPolygon poly2)
+{
+
+}
+
+bool ConvexPolygon_Circle(convexPolygon poly, circle circle)
+{
+    
 }

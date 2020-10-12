@@ -34,22 +34,9 @@ vector2 unitVector(vector2 vector)
     return vectUnit;
 }
 
-bool compareVector(vector2 vectorA, vector2 vectorB)
+bool compareVector(vector2 vectorA, vector2 vectorB) // 0 false, 1 true
 {
-    bool equal;
-    const int e = 1.401298E-45;
-
-    if (vectorA.x > vectorB.x - e && vectorA.x < vectorB.x + e)
-    {
-        if (vectorA.y > vectorB.y - e && vectorA.y < vectorB.y + e)
-            equal = true;
-        else
-            equal = false;
-    }
-    else
-        equal = false;
-
-    return equal;
+    return (fabs(vectorA.x - vectorB.x) <= E) && (fabs(vectorA.y - vectorB.y) <= E);
 }
 
 float squareMagnitude(vector2 vector)
@@ -123,39 +110,44 @@ float angle(vector2 vectorA, vector2 vectorB) // angle between 2 vectors
 
     float angle = acosf(dotProduct(vectorA, vectorB) / (vectMagA * vectMagB));
 
-    return angle;
+    return angle * (180/M_PI); // in degree
 }
 
-void vectRotate(vector2 vector, float angle) // angle in radian
+vector2 vectRotate(vector2 vector, float angle) // angle in radian
 {
     float x = vector.x;
 
     vector.x = x * cosf(angle) - vector.y * sinf(angle);
     vector.y = x * sinf(angle) + vector.y * cosf(angle);
+
+    return vector;
 }
 
-void ptRotate(point2 origin, point2 point, float angle)
+point2 ptRotate(point2 origin, point2 point, float angle) // angle in radian
 {
     vector2 vect = {point.x - origin.x, point.y - origin.y};
 
-    vectRotate(vect, angle);
+    vect = vectRotate(vect, angle);
 
     point.x = vect.x + origin.x;
     point.y = vect.y + origin.y;
+
+    return point;
 }
 
-void rightAngleRotate(vector2 vector)
+vector2 rightAngleRotation(vector2 vector)
 { 
     float x = vector.x;
 
     vector.x = - vector.y;
     vector.y = x; 
+
+    return vector;
 }
 
 vector2 normalVector(vector2 vector)
 {
-    vector2 rotVect = {vector.x, vector.y};
-    rightAngleRotate(rotVect);
+    vector2 rotVect = rightAngleRotation(vector);
 
     return rotVect;
 }

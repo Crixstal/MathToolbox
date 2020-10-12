@@ -12,8 +12,8 @@ void locToGlobPos(referential2 local, point2* pt)
 void globToLocPos(referential2 local, point2* pt)
 {
     vector2 OP = {pt->x - local.origin.x, pt->y - local.origin.y};
-    pt->x = dotProduct(OP, local.i) / 2;
-    pt->y = dotProduct(OP, local.j) / 2;
+    pt->x = dotProduct(OP, local.i);
+    pt->y = dotProduct(OP, local.j);
 }
 
 void locToGlobVect(referential2 local, vector2* vect)
@@ -27,6 +27,6 @@ void globToLocVect(referential2 local, vector2* vect)
 {
     vector2 tmpVect = *vect;
 
-    vect->x = dotProduct(tmpVect, local.i) / 2;
-    vect->y = dotProduct(tmpVect, local.j) / 2;
+    vect->x = dotProduct(tmpVect, local.i);
+    vect->y = dotProduct(tmpVect, local.j);
 }
