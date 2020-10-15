@@ -78,7 +78,8 @@ bool Segment_Circle(segment seg, circle circle)
 
 bool Circle_Circle(circle circle1, circle circle2)
 {
-
+    float centers_distance = distance(circle1.center, circle2.center);
+    return centers_distance <= circle1.radius + circle2.radius;
 }
 
 bool Circle_Box(circle circle, rect box)
