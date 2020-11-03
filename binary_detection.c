@@ -63,7 +63,7 @@ bool Line_Segment(line line1, segment seg)
 
 bool Line_Circle(line line1, circle circle)
 {
-
+    
 }
 
 bool Segment_Segment(segment seg1, segment seg2)

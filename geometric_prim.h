@@ -101,10 +101,11 @@ float getMax(float a, float b);
 range globalRange(range rng1, range rng2);
 range globRngVal(range rng, float a);
 bool rangeOverlap(range rng1, range rng2);
-range ptOnAxisRng(point2 pt, vector2 vect);
-range segOnAxisRng(segment seg, vector2 vect);
-range boxOnAxisRng(rect box, vector2 vect);
-range circleOnAxisRng(vector2 vect);
+range pointRng(point2 pt, vector2 vect);
+range segmentRng(segment seg, vector2 vect);
+range boxRng(rect box, vector2 vect);
+range circleRng(vector2 vect, circle circle);
+range convexRng(vector2 vect, convexPolygon convPol);
 
 // BINARY DETECTION
 bool Point_Point(point2 pt1, point2 pt2);

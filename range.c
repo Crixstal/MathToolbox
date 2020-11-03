@@ -40,13 +40,13 @@ range globRngVal(range rng, float a)
 
 bool rangeOverlap(range rng1, range rng2)
 {
-    if (rng1.min > rng2.max || rng2.min > rng1.max)
+    if (rng1.min >= rng2.max || rng2.min >= rng1.max)
         return false;
 
     return true;
 }
 
-range ptOnAxisRng(point2 pt, vector2 vect)
+range pointRng(point2 pt, vector2 vect)
 {
     vector2 vectPt = {pt.x, pt.y};
     float num = dotProduct(vectPt, vect);
@@ -55,7 +55,7 @@ range ptOnAxisRng(point2 pt, vector2 vect)
     return rng;
 }
 
-range segOnAxisRng(segment seg, vector2 vect)
+range segmentRng(segment seg, vector2 vect)
 {
     float min, max;
     vector2 vectPt1 = {seg.pt1.x, seg.pt1.y};
@@ -79,7 +79,7 @@ range segOnAxisRng(segment seg, vector2 vect)
     return rng;
 }
 
-range boxOnAxisRng(rect box, vector2 vect)
+range boxRng(rect box, vector2 vect)
 {
     point2 pt = {box.center.x + box.halfWidth, box.center.y + box.halfHeight};
     point2 pt1 = {box.center.x - box.halfWidth, box.center.y + box.halfHeight};
@@ -109,11 +109,43 @@ range boxOnAxisRng(rect box, vector2 vect)
     return rng;
 }
 
-range circleOnAxisRng(vector2 vect)
+range circleRng(vector2 vect, circle circle)
 {
-    range rng;
+    vector2 pt1 = {circle.center.x - circle.radius * vect.x, circle.center.y - circle.radius * vect.y};
+    vector2 pt2 = {circle.center.x + circle.radius * vect.x, circle.center.y + circle.radius * vect.y};
 
+    float num1 = dotProductVector2(pt1, vect);
+    float num2 = dotProductVector2(pt2, vect);
 
+    if (num1 >= num2)
+    {
+        range rng = {num2, num1};
+        return rng;
+    }
+    else
+    {
+        range rng = {num1, num2};
+        return rng;
+    }
+}
 
-    return rng;
+range convexRng(vector2 vect, convexPolygon convPol)
+{
+    range rng = {0, 0};
+
+    for (int i = 0; i < convPol.array_points; i++)
+    {
+        vector2 pt = {convPol.array_points[i].x, convPol.array_points[i].y};
+        float num = dotProductVector2(pt, vect);
+
+        if (i == 0)
+        {
+            rng.min = num;
+            rng.max = num;
+        }
+        else if (num < rng.min)
+            rng.min = num;
+        else if (num > rng.max)
+            rng.max = num;
+    }
 }
