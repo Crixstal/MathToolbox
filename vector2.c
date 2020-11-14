@@ -117,20 +117,30 @@ vector2 vectRotate(vector2 vector, float angle) // angle in radian
 {
     float x = vector.x;
 
-    vector.x = x * cosf(angle) - vector.y * sinf(angle);
-    vector.y = x * sinf(angle) + vector.y * cosf(angle);
+    if (vector.x == 0 && vector.y == 0)
+    {
+        vector.x = sinf(angle);
+	    vector.y = cosf(angle);
+    }
 
+    else
+    {
+        vector.x = x * cosf(angle) - vector.y * sinf(angle);
+        vector.y = x * sinf(angle) + vector.y * cosf(angle);
+    }
+    
     return vector;
 }
 
 point2 ptRotate(point2 origin, point2 point, float angle) // angle in radian
 {
-    vector2 vect = {point.x - origin.x, point.y - origin.y};
+    if (point.x == origin.x && point.y == origin.y)
+        return point;
 
-    vect = vectRotate(vect, angle);
-
-    point.x = vect.x + origin.x;
-    point.y = vect.y + origin.y;
+    float x = point.x;
+    
+    point.x = x * cosf(angle) - point.y * sinf(angle);
+    point.y = x * sinf(angle) + point.y * cosf(angle);
 
     return point;
 }

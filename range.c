@@ -114,8 +114,8 @@ range circleRng(vector2 vect, circle circle)
     vector2 pt1 = {circle.center.x - circle.radius * vect.x, circle.center.y - circle.radius * vect.y};
     vector2 pt2 = {circle.center.x + circle.radius * vect.x, circle.center.y + circle.radius * vect.y};
 
-    float num1 = dotProductVector2(pt1, vect);
-    float num2 = dotProductVector2(pt2, vect);
+    float num1 = dotProduct(pt1, vect);
+    float num2 = dotProduct(pt2, vect);
 
     if (num1 >= num2)
     {
@@ -128,7 +128,7 @@ range circleRng(vector2 vect, circle circle)
         return rng;
     }
 }
-
+/*
 range convexRng(vector2 vect, convexPolygon convPol)
 {
     range rng = {0, 0};
@@ -136,7 +136,7 @@ range convexRng(vector2 vect, convexPolygon convPol)
     for (int i = 0; i < convPol.array_points; i++)
     {
         vector2 pt = {convPol.array_points[i].x, convPol.array_points[i].y};
-        float num = dotProductVector2(pt, vect);
+        float num = dotProduct(pt, vect);
 
         if (i == 0)
         {
@@ -148,4 +148,6 @@ range convexRng(vector2 vect, convexPolygon convPol)
         else if (num > rng.max)
             rng.max = num;
     }
-}
+
+    return rng;
+}*/

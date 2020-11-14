@@ -108,8 +108,8 @@ range circleRng(vector2 vect, circle circle);
 range convexRng(vector2 vect, convexPolygon convPol);
 
 // BINARY DETECTION
-bool Point_Point(point2 pt1, point2 pt2);
-bool Point_Line(point2 pt, line line);
+bool Point_Point(point2 pt1, point2 pt2, float e);
+bool Point_Line(point2 pt, line line, float e);
 bool Point_Segment(point2 pt, segment seg);
 bool Point_Circle(point2 pt, circle circle);
 bool Point_Box(point2 pt, rect box);

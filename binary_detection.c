@@ -3,24 +3,24 @@
 
 #include "geometric_prim.h"
 
-bool Point_Point(point2 pt1, point2 pt2)
+bool Point_Point(point2 pt1, point2 pt2, float e)
 {
-    return (fabs(pt1.x - pt2.x) < E && fabs(pt1.y - pt2.y) < E);
+    return (fabs(pt1.x - pt2.x) <= E && fabs(pt1.y - pt2.y) <= E);
 }
 
-bool Point_Line(point2 pt, line line)
+bool Point_Line(point2 pt, line line, float e)
 {
     vector2 normal = normalVector(line.vectDir);
-    vector2 bP = {pt.x - line.base.x, pt.y - line.base.y};
+    vector2 baseToPt = {pt.x - line.base.x, pt.y - line.base.y};
 
-    return (fabs(dotProduct(bP, normal)) < E);
+    return (fabs(dotProduct(baseToPt, normal)) <= E);
 }
 
 bool Point_Segment(point2 pt, segment seg) // check
 {
     line segLine = {pt, {seg.pt2.x - seg.pt1.x, seg.pt2.y - seg.pt1.y}};
 
-    return (Point_Line(pt, segLine) == 0);
+    return (Point_Line(pt, segLine, E) == 0);
 }
 
 bool Point_Circle(point2 pt, circle circle)
@@ -36,7 +36,7 @@ bool Point_Box(point2 pt, rect box)
              && pt.y <= box.center.y + box.halfHeight && pt.y >= box.center.y - box.halfHeight);
 }
 
-bool Line_Line(line line1, line line2)
+bool Line_Line(line line1, line line2) // not finished
 {
     vector2 n2 = {-line2.vectDir.y, line2.vectDir.x};
 
@@ -63,17 +63,29 @@ bool Line_Segment(line line1, segment seg)
 
 bool Line_Circle(line line1, circle circle)
 {
-    
+    return Point_Line(circle.center, line1, circle.radius * circle.radius);
 }
-
+/*
 bool Segment_Segment(segment seg1, segment seg2)
 {
 
 }
-
+*/
 bool Segment_Circle(segment seg, circle circle)
 {
+    vector2 segVect = { seg.pt2.x - seg.pt1.x, seg.pt2.y - seg.pt1.y };
+    line segLine = { seg.pt1, segVect };
+    rightAngleRotation(segVect);
 
+    range circleRange = circleRng(segVect, circle);
+    range segRange = segmentRng(seg, segVect);
+
+    if (Point_Line(circle.center, segLine, circle.radius) == 0)
+        return 0;
+    else if (Point_Circle(seg.pt1, circle) == 1 || Point_Circle(seg.pt2, circle) == 1)
+        return 1;
+    else
+        return (rangeOverlap(circleRange, segRange));
 }
 
 bool Circle_Circle(circle circle1, circle circle2)
@@ -84,17 +96,25 @@ bool Circle_Circle(circle circle1, circle circle2)
 
 bool Circle_Box(circle circle, rect box)
 {
-
+    return (fabs(circle.center.x - box.center.x) <= box.halfWidth && fabs(circle.center.y - box.center.y) <= box.halfHeight);
 }
 
 bool Box_Box(rect box1, rect box2)
 {
-
+    return (box1.center.y - box1.halfHeight > box2.center.y + box2.halfHeight || box1.center.y + box1.halfHeight < box2.center.y - box2.halfHeight ||
+            box1.center.x + box1.halfWidth < box2.center.x - box2.halfWidth || box1.center.x - box1.halfWidth > box2.center.x + box2.halfWidth);
 }
-
+/*
 bool ConvexPolygon_Point(point2 pt, convexPolygon poly)
 {
+    for (int i = 1; i < poly.pointsNum; i++)
+    {
+        vector2 vect = {poly.array_points[i].x - poly.array_points[i - 1].x, poly.array_points[i].y - poly.array_points[i - 1].y};
+        range polyRng = convexRng(vect, poly);
+        range ptRng = pointRng(pt, vect);
 
+        return (rangeOverlap(polyRng, ptRng) == false);
+    }
 }
 
 bool ConvexPolygon_ConvexPolygon(convexPolygon poly1, convexPolygon poly2)
@@ -105,4 +125,4 @@ bool ConvexPolygon_ConvexPolygon(convexPolygon poly1, convexPolygon poly2)
 bool ConvexPolygon_Circle(convexPolygon poly, circle circle)
 {
     
-}
+}*/

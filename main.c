@@ -52,14 +52,14 @@ void testVectors()
     float ang = angle(vectA, vectB);
     printf("angle in degree = %f\n\n", ang);
 
-    float n = 0.785398; // 45 degree
+    float n = M_PI / 36; // 5 degree
     vector2 rot = vectRotate(vectA, n);
     printf("vect rotate : x = %f, y = %f\n\n", rot.x, rot.y);
 
     point2 origin = {0, 0}, point = {3, 2};
     point2 rotPt = ptRotate(origin, point, n);
     printf("point rotate : x = %f, y = %f\n\n", rotPt.x, rotPt.y);
-    
+   
     vector2 right = rightAngleRotation(vectA);
     printf("right angle vector : x = %f, y = %f\n\n", right.x, right.y);
 
