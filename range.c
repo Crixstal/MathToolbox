@@ -109,7 +109,7 @@ range boxRng(rect box, vector2 vect)
     return rng;
 }
 
-range circleRng(vector2 vect, circle circle)
+range circleRng(circle circle, vector2 vect)
 {
     vector2 pt1 = {circle.center.x - circle.radius * vect.x, circle.center.y - circle.radius * vect.y};
     vector2 pt2 = {circle.center.x + circle.radius * vect.x, circle.center.y + circle.radius * vect.y};
@@ -128,12 +128,12 @@ range circleRng(vector2 vect, circle circle)
         return rng;
     }
 }
-/*
-range convexRng(vector2 vect, convexPolygon convPol)
+
+range convexRng(convexPolygon convPol, vector2 vect)
 {
     range rng = {0, 0};
 
-    for (int i = 0; i < convPol.array_points; i++)
+    for (int i = 0; i < convPol.sizeArray; i++)
     {
         vector2 pt = {convPol.array_points[i].x, convPol.array_points[i].y};
         float num = dotProduct(pt, vect);
@@ -150,4 +150,4 @@ range convexRng(vector2 vect, convexPolygon convPol)
     }
 
     return rng;
-}*/
+}

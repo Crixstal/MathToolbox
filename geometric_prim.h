@@ -51,6 +51,7 @@ typedef struct orientedRect
 typedef struct convexPolygon
 {   
     point2* array_points;
+    int sizeArray;
 } convexPolygon;
 
 typedef struct referential2
@@ -104,8 +105,8 @@ bool rangeOverlap(range rng1, range rng2);
 range pointRng(point2 pt, vector2 vect);
 range segmentRng(segment seg, vector2 vect);
 range boxRng(rect box, vector2 vect);
-range circleRng(vector2 vect, circle circle);
-range convexRng(vector2 vect, convexPolygon convPol);
+range circleRng(circle circle, vector2 vect);
+range convexRng(convexPolygon convPol, vector2 vect);
 
 // BINARY DETECTION
 bool Point_Point(point2 pt1, point2 pt2, float e);
@@ -126,6 +127,6 @@ bool Circle_Box(circle circle, rect box);
 
 bool Box_Box(rect box1, rect box2);
 
-bool ConvexPolygon_Point(point2 pt, convexPolygon poly);
+bool ConvexPolygon_Point(convexPolygon poly, point2 pt);
 bool ConvexPolygon_ConvexPolygon(convexPolygon poly1, convexPolygon poly2);
 bool ConvexPolygon_Circle(convexPolygon poly, circle circle);

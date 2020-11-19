@@ -68,7 +68,20 @@ bool Line_Circle(line line1, circle circle)
 /*
 bool Segment_Segment(segment seg1, segment seg2)
 {
+    range rg1;
+    range rg2;
 
+    vector2 vectorDir;
+    vector2 OA;
+    vector2 OB;
+
+    rg1.min = getMin(dotProduct(OA, vectorDir), dotProduct(OB, vectorDir));
+    rg2.max = getMax(dotProduct(OA, vectorDir), dotProduct(OB, vectorDir));
+
+    if (rg1.min > rg2.max || rg2.min > rg1.max) //dissociate range
+        return true;
+
+    return false;
 }
 */
 bool Segment_Circle(segment seg, circle circle)
@@ -77,7 +90,7 @@ bool Segment_Circle(segment seg, circle circle)
     line segLine = { seg.pt1, segVect };
     rightAngleRotation(segVect);
 
-    range circleRange = circleRng(segVect, circle);
+    range circleRange = circleRng(circle, segVect);
     range segRange = segmentRng(seg, segVect);
 
     if (Point_Line(circle.center, segLine, circle.radius) == 0)
@@ -105,15 +118,16 @@ bool Box_Box(rect box1, rect box2)
             box1.center.x + box1.halfWidth < box2.center.x - box2.halfWidth || box1.center.x - box1.halfWidth > box2.center.x + box2.halfWidth);
 }
 /*
-bool ConvexPolygon_Point(point2 pt, convexPolygon poly)
+bool ConvexPolygon_Point(convexPolygon poly, point2 pt)
 {
-    for (int i = 1; i < poly.pointsNum; i++)
+    for (int i = 1; i < poly.sizeArray; i++)
     {
         vector2 vect = {poly.array_points[i].x - poly.array_points[i - 1].x, poly.array_points[i].y - poly.array_points[i - 1].y};
-        range polyRng = convexRng(vect, poly);
+        
+        range polyRng = convexRng(poly, vect);
         range ptRng = pointRng(pt, vect);
 
-        return (rangeOverlap(polyRng, ptRng) == false);
+        return (rangeOverlap(polyRng, ptRng));
     }
 }
 
