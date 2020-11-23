@@ -120,23 +120,87 @@ bool Box_Box(rect box1, rect box2)
 /*
 bool ConvexPolygon_Point(convexPolygon poly, point2 pt)
 {
-    for (int i = 1; i < poly.sizeArray; i++)
-    {
-        vector2 vect = {poly.array_points[i].x - poly.array_points[i - 1].x, poly.array_points[i].y - poly.array_points[i - 1].y};
+    //for (int i = 1; i < poly.sizeArray; ++i)
+    //{
+    //    vector2 vect = {poly.array_points[i].x - poly.array_points[i - 1].x, poly.array_points[i].y - poly.array_points[i - 1].y};
         
-        range polyRng = convexRng(poly, vect);
-        range ptRng = pointRng(pt, vect);
+    //    range polyRng = convexRng(poly, vect);
+    //    range ptRng = pointRng(pt, vect);
 
-        return (rangeOverlap(polyRng, ptRng));
-    }
+    //    return (rangeOverlap(polyRng, ptRng));
+    //}
+
+    for (int i = 0; i < poly.sizeArray; ++i)
+	{
+		int k = i + 1;
+		if (k == poly.sizeArray + 1)
+			k = 0;
+
+		vector2 vect = {poly.array_points[i].x, poly.array_points[k].y};
+        vector2 normalVect = normalVector(vect);
+
+		range polyRng = pointRng(poly.array_points[0], normalVect);
+
+		for (int j = 0; j < poly.sizeArray; j++)
+			polyRng = globalRange(polyRng, pointRng(poly.array_points[j], normalVect));
+
+		range ptRng = pointRng(pt, normalVect);
+
+		return (rangeOverlap(polyRng, ptRng));
+	}
 }
 
 bool ConvexPolygon_ConvexPolygon(convexPolygon poly1, convexPolygon poly2)
 {
+	for (int i = 0; i < poly1.sizeArray + poly2.sizeArray; ++i)
+	{
+		int k = i + 1;
+		if (k == poly1.sizeArray || k == poly2.sizeArray)
+			k = 0;
 
+        vector2 normalVect;
+
+		if (i <= poly1.sizeArray)
+		{
+			vector2 vect = { poly1.array_points[k].x - poly1.array_points[i].x, poly1.array_points[k].y - poly1.array_points[i].y };
+			vector2 normalVect = normalVector(vect);
+		}
+		else
+		{
+			vector2 vect = { poly2.array_points[k - poly1.sizeArray].x - poly2.array_points[i - poly1.sizeArray].x, poly2.array_points[k - poly1.sizeArray].y - poly2.array_points[i - poly1.sizeArray].y};
+			vector2 normalVect = normalVector(vect);
+		}
+
+		range polyRng1 = pointRng(poly1.array_points[0], normalVect);
+
+		for (int j = 0; j < poly1.sizeArray; j++)
+			polyRng1 = globalRange(polyRng1, pointRng(poly1.array_points[j], normalVect));
+
+		range polyRng2 = pointRng(poly2.array_points[0], normalVect);
+		for (int j = 0; j < poly2.sizeArray; j++)
+			polyRng2 = globalRange(polyRng2, pointRng(poly2.array_points[j], normalVect));
+
+		return (rangeOverlap(polyRng1, polyRng2));
+	}
 }
 
 bool ConvexPolygon_Circle(convexPolygon poly, circle circle)
 {
-    
+    for (int i = 0; i < poly.sizeArray; ++i)
+	{
+		int l = i + 1;
+		if (l == poly.sizeArray + 1)
+			l = 0;
+
+		vector2 vect = { poly.array_points[l].y - poly.array_points[i].x, poly.array_points[l].y - poly.array_points[i].y };
+		vector2 normalVect = normalVector(vect);
+
+		range polyRng = pointRng(poly.array_points[0], normalVect);
+		for (int j = 0; j < poly.sizeArray; j++)
+			polyRng = globalRange(polyRng, pointRng(poly.array_points[j], normalVect));
+
+		range range_circle = circleRng(circle, normalVect);
+
+		return (rangeOverlap(polyRng, range_circle));
+	}
 }*/
