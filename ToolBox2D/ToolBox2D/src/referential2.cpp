@@ -2,7 +2,7 @@
 
 void locToGlobPos(referential2 local, point2* pt)
 {
-    vector2 locOrigin = {local.origin.x, local.origin.y};
+    vector2 locOrigin = { local.origin.x, local.origin.y };
     vector2 OP = addition(locOrigin, scale(local.i, pt->x));
     OP = addition(OP, scale(local.j, pt->y));
     pt->x = OP.x;
@@ -11,7 +11,7 @@ void locToGlobPos(referential2 local, point2* pt)
 
 void globToLocPos(referential2 local, point2* pt)
 {
-    vector2 OP = {pt->x - local.origin.x, pt->y - local.origin.y};
+    vector2 OP = { pt->x - local.origin.x, pt->y - local.origin.y };
     pt->x = dotProduct(OP, local.i);
     pt->y = dotProduct(OP, local.j);
 }

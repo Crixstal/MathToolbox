@@ -1,10 +1,13 @@
 #pragma once
 
-#include <stdbool.h>
+#include <cstdio>
+
+#define _USE_MATH_DEFINES
+#include <cmath>
 
 #define E 1.401298E-45
 
-// GEOMETRICAL STRUCTURES
+#pragma region GEOMETRICAL STRUCTURES
 typedef struct point2
 {
     float x;
@@ -51,7 +54,6 @@ typedef struct orientedRect
 typedef struct convexPolygon
 {   
     point2* array_points;
-    int sizeArray;
 } convexPolygon;
 
 typedef struct referential2
@@ -67,50 +69,55 @@ typedef struct range
     float min;
     float max;
 } range;
+#pragma endregion
 
-// VECTORS
+#pragma region VECTORS
 vector2 zeroVector();
 float vectorMagnitude(vector2 vector);
 vector2 unitVector(vector2 vector);
 bool compareVector(vector2 vectorA, vector2 vectorB);
 float squareMagnitude(vector2 vector);
 float distance(point2 pointA, point2 pointB);
+#pragma endregion
 
-// OPERATIONS ON VECTOR
+#pragma region OPERATIONS ON VECTOR
 vector2 addition(vector2 vectorA, vector2 vectorB);
 vector2 subtraction(vector2 vectorA, vector2 vectorB);
 vector2 scale(vector2 vector, float k);
 vector2 negate(vector2 vector);
 float dotProduct(vector2 vectorA, vector2 vectorB);
+#pragma endregion
 
-// VECTORS AND ANGlE
+#pragma region VECTORS AND ANGlE
 float angle(vector2 vectorA, vector2 vectorB);
 vector2 vectRotate(vector2 vector, float angle);
 point2 ptRotate(point2 origin, point2 point, float angle);
 vector2 rightAngleRotation(vector2 vector);
 vector2 normalVector(vector2 vector);
+#pragma endregion
 
-// CHANGE OF REFERENTIAL
+#pragma region CHANGE OF REFERENTIAL
 void locToGlobPos(referential2 local, point2* pt);
 void globToLocPos(referential2 local, point2* pt);
 void locToGlobVect(referential2 local, vector2* vect);
 void globToLocVect(referential2 local, vector2* vect);
+#pragma endregion
 
-// RANGE
+#pragma region RANGE
 float getMin(float a, float b);
 float getMax(float a, float b);
 range globalRange(range rng1, range rng2);
 range globRngVal(range rng, float a);
 bool rangeOverlap(range rng1, range rng2);
-range pointRng(point2 pt, vector2 vect);
-range segmentRng(segment seg, vector2 vect);
-range boxRng(rect box, vector2 vect);
-range circleRng(circle circle, vector2 vect);
-range convexRng(convexPolygon convPol, vector2 vect);
+range ptOnAxisRng(point2 pt, vector2 vect);
+range segOnAxisRng(segment seg, vector2 vect);
+range boxOnAxisRng(rect box, vector2 vect);
+range circleOnAxisRng(vector2 vect);
+#pragma endregion
 
-// BINARY DETECTION
-bool Point_Point(point2 pt1, point2 pt2, float e);
-bool Point_Line(point2 pt, line line, float e);
+#pragma region BINARY DETECTION
+bool Point_Point(point2 pt1, point2 pt2);
+bool Point_Line(point2 pt, line line);
 bool Point_Segment(point2 pt, segment seg);
 bool Point_Circle(point2 pt, circle circle);
 bool Point_Box(point2 pt, rect box);
@@ -127,6 +134,7 @@ bool Circle_Box(circle circle, rect box);
 
 bool Box_Box(rect box1, rect box2);
 
-bool ConvexPolygon_Point(convexPolygon poly, point2 pt);
+bool ConvexPolygon_Point(point2 pt, convexPolygon poly);
 bool ConvexPolygon_ConvexPolygon(convexPolygon poly1, convexPolygon poly2);
 bool ConvexPolygon_Circle(convexPolygon poly, circle circle);
+#pragma endregion
