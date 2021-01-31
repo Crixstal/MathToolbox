@@ -11,15 +11,36 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\geometric_prim.h">
+    <ClInclude Include="include\Sphere.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Cylinder.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Maths.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Plane.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Application.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\3Dcollisions.cpp">
+    <ClCompile Include="src\main.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\main.cpp">
+    <ClCompile Include="src\Sphere.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Cylinder.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Plane.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Application.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
