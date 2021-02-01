@@ -26,6 +26,9 @@
     <ClInclude Include="include\Application.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\Quad.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -41,6 +44,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Application.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Quad.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

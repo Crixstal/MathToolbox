@@ -4,6 +4,7 @@
 #include "Plane.h"
 #include "Sphere.h"
 #include "Cylinder.h"
+#include "Quad.h"
 
 int main()
 {
@@ -11,6 +12,7 @@ int main()
     Plane plane = {{ 0, 2, 0 }, 0};
     Sphere sphere;
     Cylinder cylinder;
+    Quad quad;
     
     app.initWindow();
 
@@ -36,6 +38,8 @@ int main()
         EndMode3D();
 
         app.cameraControls();
+
+        DrawFPS(700, 10);
 
         EndDrawing();
     }

@@ -10,7 +10,7 @@ bool Sphere::Segment_Sphere(const Vector3& vecA, const Vector3& vecB, Sphere sph
 
     float delta = powf(dotCenterAB, 2) - 4 * ABsquared * (powf(dotProduct(CenterA, CenterA), 2) - powf(sphere.radius, 2));
 
-    if (delta < powf(10, -6))
+    if (delta < 1e-6)
         return false;
 
     float T = (-2 * dotCenterAB - sqrt(delta)) / (2 * ABsquared);

@@ -25,14 +25,14 @@ bool Plane::Segment_Plane(const Vector3& vecA, const Vector3& vecB, Plane plane,
 {
 	Vector3 AB = vecB - vecA;
 
-	if (dotProduct(AB, plane.normal) < powf(10, -6))
+	if (dotProduct(AB, plane.normal) < 1e-6)
 		return false;
 
 	Vector3 vector = plane.normal * plane.direction - vecA;
 
 	float T = 2 * dotProduct(vector, plane.normal) / dotProduct(AB, plane.normal);
 
-	if (plane.direction < powf(10, -6))
+	if (plane.direction < 1e-6)
 		T = -T;
 
 	interPt = vecA + AB * T;

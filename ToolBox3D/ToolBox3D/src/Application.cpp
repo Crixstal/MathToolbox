@@ -31,8 +31,8 @@ void Application::drawGrid()
     DrawLine3D({ 0, -5, 0 }, { 0,5,0 }, GRAY);
 
     // Gizmo
-    DrawLine3D({ 0, 0, 0 }, { 0,5,0 }, GREEN);
     DrawLine3D({ 0, 0, 0 }, { 5,0,0 }, RED);
+    DrawLine3D({ 0, 0, 0 }, { 0,5,0 }, GREEN);
     DrawLine3D({ 0, 0, 0 }, { 0,0,5 }, BLUE);
 }
 
