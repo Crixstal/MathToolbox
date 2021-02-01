@@ -1,6 +1,7 @@
 #pragma once
 
 #include <raylib.h>
+#include <rlgl.h>
 
 #include "Maths.h"
 
@@ -15,6 +16,6 @@ struct Plane
 	Plane(Vector3 vecA, Vector3 vecB, Vector3 vecC);
 
 	bool Segment_Plane(const Vector3& vecA, const Vector3& vecB, Plane plane, Vector3& interPt, Vector3& interNormal);
-	void drawPlane(Vector3 normal);
+	void myDrawPlane();
 };
 

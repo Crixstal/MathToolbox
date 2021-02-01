@@ -18,7 +18,8 @@ void Quad::myDrawRectangle(Vector3 center, Vector3 unitNormal, Vector2 extension
 
     rlScalef(extensions.x, 1, extensions.y);
 
-    rlBegin(RL_TRIANGLES);
+    //rlBegin(RL_LINES);
+    rlBegin(RL_QUADS);
     rlColor4ub(rectColor.r, rectColor.g, rectColor.b, rectColor.a);
 
     rlVertex3f(-1, 0, -1);

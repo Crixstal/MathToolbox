@@ -12,7 +12,7 @@ int main()
     Plane plane = {{ 0, 2, 0 }, 0};
     Sphere sphere;
     Cylinder cylinder;
-    Quad quad;
+    Quad quad = { { 0.f, 0.f, 0.f }, {2.f, 2.f, 2.f}, { 1.f, 1.f } };
     
     app.initWindow();
 
@@ -32,8 +32,9 @@ int main()
 
         app.drawGrid();
 
-        //plane.drawPlane(plane.normal);
-        sphere.drawSphere();
+        //plane.myDrawPlane();
+        //sphere.myDrawSphere(30.f, 30.f);
+        quad.myDrawRectangle(quad.center, quad.unitNormal, quad.extensions);
 
         EndMode3D();
 

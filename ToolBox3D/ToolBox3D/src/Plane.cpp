@@ -40,14 +40,17 @@ bool Plane::Segment_Plane(const Vector3& vecA, const Vector3& vecB, Plane plane,
 
 	return true;
 }
-/*
-void Plane::drawPlane(Vector3 normal)
-{
-	DrawPlane(normal, { 3, 3 }, GREEN);
 
-	if (Segment_Plane() == true)
-		DrawLine3D({ 0, 0, 0 }, { 2, 3, 1 }, RED);
-	else
-		DrawLine3D({ 0, 0, 0 }, { 2, 3, 1 }, GREEN);
+void Plane::myDrawPlane()
+{
+	rlBegin(RL_QUADS);
+
+	rlColor3f(0.f, 1.f, 0.f);
+
+	rlVertex3f(-1.f, 2.f, 3.f);
+	rlVertex3f( 1.f, 2.f, 3.f);
+	rlVertex3f( 1.f, 0.f, 0.f);
+	rlVertex3f(-1.f, 0.f, 0.f);
+
+	rlEnd();
 }
-*/
