@@ -11,7 +11,7 @@ int main()
     Application app;
     Plane plane = {{ 0, 2, 0 }, 0};
     Sphere sphere;
-    Cylinder cylinder;
+    Cylinder cylinder = { { 0.f, 0.f, 0.f }, { 3.f, 3.f, 0.f }, 1.f };
     Quad quad = { { 0.f, 0.f, 0.f }, {2.f, 2.f, 2.f}, { 1.f, 1.f } };
     
     app.initWindow();
@@ -34,7 +34,8 @@ int main()
 
         //plane.myDrawPlane();
         //sphere.myDrawSphere(30.f, 30.f);
-        quad.myDrawRectangle(quad.center, quad.unitNormal, quad.extensions);
+        //quad.myDrawRectangle(quad.center, quad.unitNormal, quad.extensions);
+        cylinder.myDrawCylinder(cylinder.ptA, cylinder.ptB, cylinder.radius);
 
         EndMode3D();
 
