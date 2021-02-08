@@ -34,8 +34,8 @@ int main()
 
         //plane.myDrawPlane();
         //sphere.myDrawSphere(30.f, 30.f);
-        //quad.myDrawRectangle(quad.center, quad.unitNormal, quad.extensions);
-        cylinder.myDrawCylinder(cylinder.ptA, cylinder.ptB, cylinder.radius);
+        quad.myDrawRectangle(quad.center, quad.unitNormal, quad.extensions);
+        //cylinder.myDrawCylinder(cylinder.ptA, cylinder.ptB, cylinder.radius);
 
         EndMode3D();
 

@@ -1,7 +1,8 @@
 #pragma once
 
-#include <raylib.h>
-#include <rlgl.h>
+#include <iostream>
+
+#include "Maths.h"
 
 struct Cylinder
 {
@@ -12,6 +13,8 @@ struct Cylinder
 
     void myDrawCylinder(const Vector3& ptA, const Vector3& ptB, const float& radius, Color color = GREEN);
 
-    bool Segment_CylinderInfinite(const Vector3& vecA, const Vector3& vecB, Cylinder cylinder, Vector3& interPt, Vector3& interNormal);
+    bool Segment_CylinderInfinite(const Segment& segment, const Cylinder& cylinder, Vector3& intersection);
+
+    bool Segment_Cylinder(const Segment& segment, const Cylinder& cylinder, Vector3& intersection);
 };
 

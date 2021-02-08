@@ -2,11 +2,14 @@
 
 void Quad::myDrawRectangle(Vector3 center, Vector3 unitNormal, Vector2 extensions, Color rectColor)
 {
-    if (Vector3LengthSqr(unitNormal) < 1e-4) return;
+    if (Vector3LengthSqr(unitNormal) < 1e-4)
+        return;
+
     unitNormal = Vector3Normalize(unitNormal);
 
     int numVertex = 6;
-    if (rlCheckBufferLimit(numVertex)) rlglDraw();
+    if (rlCheckBufferLimit(numVertex))
+        rlglDraw();
 
     rlPushMatrix();
     rlTranslatef(center.x, center.y, center.z);
@@ -18,7 +21,6 @@ void Quad::myDrawRectangle(Vector3 center, Vector3 unitNormal, Vector2 extension
 
     rlScalef(extensions.x, 1, extensions.y);
 
-    //rlBegin(RL_LINES);
     rlBegin(RL_QUADS);
     rlColor4ub(rectColor.r, rectColor.g, rectColor.b, rectColor.a);
 
@@ -26,10 +28,16 @@ void Quad::myDrawRectangle(Vector3 center, Vector3 unitNormal, Vector2 extension
     rlVertex3f(-1, 0, 1);
     rlVertex3f(1, 0, 1);
 
-    rlVertex3f(-1, 0, -1);
+    rlVertex3f(1, 0, -1);
     rlVertex3f(1, 0, 1);
     rlVertex3f(1, 0, -1);
 
     rlEnd();
     rlPopMatrix();
 }
+
+/*
+bool Quad::Segment_Quad(const Segment& segment, Quad quad, Vector3& interPt, Vector3& interNormal)
+{
+
+}*/

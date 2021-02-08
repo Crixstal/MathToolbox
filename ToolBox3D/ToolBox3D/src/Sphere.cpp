@@ -1,9 +1,9 @@
 #include "Sphere.h"
 
-bool Sphere::Segment_Sphere(const Vector3& vecA, const Vector3& vecB, Sphere sphere, Vector3& interPt, Vector3& interNormal)
+bool Sphere::Segment_Sphere(const Segment& segment, Sphere sphere, Vector3& interPt, Vector3& interNormal)
 {
-    Vector3 AB = vecB - vecA;
-    Vector3 CenterA = vecA - sphere.center;
+    Vector3 AB = vecFromPt(segment.ptA, segment.ptB);
+    Vector3 CenterA = vecFromPt(sphere.center, segment.ptA);
 
     float ABsquared = dotProduct(AB, AB);
     float dotCenterAB = dotProduct(CenterA, AB);
@@ -14,7 +14,7 @@ bool Sphere::Segment_Sphere(const Vector3& vecA, const Vector3& vecB, Sphere sph
         return false;
 
     float T = (-2 * dotCenterAB - sqrt(delta)) / (2 * ABsquared);
-    interPt = vecA + AB * T;
+    interPt = segment.ptA + AB * T;
 
     interNormal = normalize(interPt - sphere.center);
 

@@ -1,7 +1,6 @@
 #pragma once
 
-#include <raylib.h>
-#include <rlgl.h>
+#include "Maths.h"
 
 struct Quad
 {
@@ -9,10 +8,7 @@ struct Quad
 	Vector3 unitNormal;
 	Vector2 extensions;
 	
-	//float halfHeight;
-	//float halfWidth;
-
 	void myDrawRectangle(Vector3 center, Vector3 unitNormal, Vector2 extensions, Color rectColor = GREEN);
-	bool Segment_Quad(const Vector3& vecA, const Vector3& vecB, Quad quad, Vector3& interPt, Vector3& interNormal);
+	bool Segment_Quad(const Segment& segment, Quad quad, Vector3& interPt, Vector3& interNormal);
 };
 
