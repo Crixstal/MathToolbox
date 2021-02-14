@@ -1,18 +1,18 @@
 #include "Plane.h"
 
-Plane::Plane(Vector3 n, float d)
+Plane::Plane(const Vector3& n, const float& d)
 {
-	normal = n;
+	normal = normalize(n);
 	direction = d;
 }
 
-Plane::Plane(Vector3 n, Vector3 pos)
+Plane::Plane(const Vector3& n, const Vector3& pos)
 {
-	normal = n;
+	normal = normalize(n);
 	direction = dotProduct(pos, n);
 }
 
-Plane::Plane(Vector3 vecA, Vector3 vecB, Vector3 vecC)
+Plane::Plane(const Vector3& vecA, const Vector3& vecB, const Vector3& vecC)
 {
 	Vector3 AB = vecFromPt(vecA, vecB);
 	Vector3 AC = vecFromPt(vecA, vecC);
@@ -21,7 +21,7 @@ Plane::Plane(Vector3 vecA, Vector3 vecB, Vector3 vecC)
 	direction = dotProduct(vecA, normal);
 }
 
-bool Plane::Segment_Plane(const Segment& segment, Plane plane, Vector3& interPt, Vector3& interNormal)
+bool Plane::Segment_Plane(const Segment& segment, Plane& plane, Vector3& interPt, Vector3& interNormal)
 {
 	Vector3 AB = vecFromPt(segment.ptA, segment.ptB);
 
@@ -41,16 +41,36 @@ bool Plane::Segment_Plane(const Segment& segment, Plane plane, Vector3& interPt,
 	return true;
 }
 
-void Plane::myDrawPlane()
+void Plane::myDrawPlane(Plane& plane, const Color& color)
 {
+	rlPushMatrix();
+	//rlTranslatef(centerPos.x, centerPos.y, centerPos.z);
+	//rlScalef(size.x, 1.0f, size.y);
+
 	rlBegin(RL_QUADS);
+	rlColor4ub(color.r, color.g, color.b, color.a);
+	rlNormal3f(plane.normal.x, plane.normal.y, plane.normal.z);
 
-	rlColor3f(0.f, 1.f, 0.f);
-
-	rlVertex3f(-1.f, 2.f, 3.f);
-	rlVertex3f( 1.f, 2.f, 3.f);
-	rlVertex3f( 1.f, 0.f, 0.f);
-	rlVertex3f(-1.f, 0.f, 0.f);
+	rlVertex3f(-1.0f, 0.0f, -1.0f);
+	rlVertex3f(-1.0f, 0.0f, 1.0f);
+	rlVertex3f(1.0f, 3.0f, 1.0f);
+	rlVertex3f(1.0f, 3.0f, -1.0f);
 
 	rlEnd();
+	rlPopMatrix();
+}
+
+void Plane::drawIntersection(const Segment& segment, Plane& plane, Vector3& interPt, Vector3& interNormal)
+{
+	if (Segment_Plane(segment, plane, interPt, interNormal))
+	{
+		DrawLine3D(segment.ptA, segment.ptB, RED);
+		myDrawPlane(plane, RED);
+	}
+
+	else
+	{
+		DrawLine3D(segment.ptA, segment.ptB, GREEN);
+		myDrawPlane(plane, GREEN);
+	}
 }

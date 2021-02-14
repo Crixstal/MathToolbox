@@ -9,10 +9,13 @@
 int main()
 {
     Application app;
-    Plane plane = {{ 0, 2, 0 }, 0};
+    Vector3 interPt = {};
+    Vector3 interNormal = {};
+    Segment segment = { {}, {2.f, 2.f, 1.f} };
+    Plane plane = { {0.f, 2.f, 0.f}, 0.f };
     Sphere sphere;
-    Cylinder cylinder = { { 0.f, 0.f, 0.f }, { 3.f, 3.f, 0.f }, 1.f };
-    Quad quad = { { 0.f, 0.f, 0.f }, {2.f, 2.f, 2.f}, { 1.f, 1.f } };
+    Cylinder cylinder = { {0.f, 0.f, 0.f}, {3.f, 3.f, 0.f}, 1.f };
+    Quad quad = { {0.f, 0.f, 0.f}, {2.f, 2.f, 2.f}, {1.f, 1.f} };
     
     app.initWindow();
 
@@ -32,9 +35,9 @@ int main()
 
         app.drawGrid();
 
-        //plane.myDrawPlane();
+        plane.drawIntersection(segment, plane, interPt, interNormal);
         //sphere.myDrawSphere(30.f, 30.f);
-        quad.myDrawRectangle(quad.center, quad.unitNormal, quad.extensions);
+        //quad.myDrawRectangle(quad.center, quad.unitNormal, quad.extensions);
         //cylinder.myDrawCylinder(cylinder.ptA, cylinder.ptB, cylinder.radius);
 
         EndMode3D();
