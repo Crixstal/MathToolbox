@@ -6,9 +6,9 @@ struct Quad
 {
 	Vector3 center;
 	Vector3 unitNormal;
-	Vector2 extensions;
+	Vector3 extensions;
 	
-	void myDrawRectangle(Vector3 center, Vector3 unitNormal, Vector2 extensions, Color rectColor = GREEN);
+	void myDrawQuad(Vector3 center, Vector3 extensions, Quaternion quaternion, Color color = GREEN);
 	bool Segment_Quad(const Segment& segment, Quad quad, Vector3& interPt, Vector3& interNormal);
 };
 

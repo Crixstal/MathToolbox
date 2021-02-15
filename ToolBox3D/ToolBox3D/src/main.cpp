@@ -5,6 +5,7 @@
 #include "Sphere.h"
 #include "Cylinder.h"
 #include "Quad.h"
+#include "Box.h"
 
 int main()
 {
@@ -12,10 +13,12 @@ int main()
     Vector3 interPt = {};
     Vector3 interNormal = {};
     Segment segment = { {}, {2.f, 2.f, 1.f} };
-    Plane plane = { {0.f, 2.f, 0.f}, 0.f };
+    Plane plane = Plane( {1.f, 1.f, 1.f}, 0.f );
     Sphere sphere;
     Cylinder cylinder = { {0.f, 0.f, 0.f}, {3.f, 3.f, 0.f}, 1.f };
-    Quad quad = { {0.f, 0.f, 0.f}, {2.f, 2.f, 2.f}, {1.f, 1.f} };
+    Quad quad = { {0.f, 0.f, 0.f}, {2.f, 2.f, 2.f}, {1.f, 1.f, 1.f} };
+    Quaternion quaternion = QuaternionFromAxisAngle({0, 0, 0}, PI);
+    Box box = { {0.f, 0.f, 0.f}, {1.f, 1.f, 1.f} };
     
     app.initWindow();
 
@@ -33,12 +36,15 @@ int main()
 
         BeginMode3D(camera);
 
+        rlDisableBackfaceCulling();
+
         app.drawGrid();
 
         plane.drawIntersection(segment, plane, interPt, interNormal);
         //sphere.myDrawSphere(30.f, 30.f);
-        //quad.myDrawRectangle(quad.center, quad.unitNormal, quad.extensions);
+        //quad.myDrawQuad(quad.center, quad.unitNormal, quad.extensions, quaternion);
         //cylinder.myDrawCylinder(cylinder.ptA, cylinder.ptB, cylinder.radius);
+        //box.myDrawBox(box.center, box.extensions);
 
         EndMode3D();
 

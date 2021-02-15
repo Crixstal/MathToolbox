@@ -1,6 +1,6 @@
 #include "Quad.h"
 
-void Quad::myDrawRectangle(Vector3 center, Vector3 unitNormal, Vector2 extensions, Color rectColor)
+void Quad::myDrawQuad(Vector3 center, Vector3 extensions, Quaternion quaternion, Color color)
 {
     if (Vector3LengthSqr(unitNormal) < 1e-4)
         return;
@@ -16,19 +16,19 @@ void Quad::myDrawRectangle(Vector3 center, Vector3 unitNormal, Vector2 extension
 
     Vector3 vect;
     float angle;
-    QuaternionToAxisAngle(QuaternionFromVector3ToVector3({ 0,1,0 }, unitNormal), &vect, &angle);
+    QuaternionToAxisAngle(quaternion, &vect, &angle);
     rlRotatef(angle * RAD2DEG, vect.x, vect.y, vect.z);
 
     rlScalef(extensions.x, 1, extensions.y);
 
-    rlBegin(RL_QUADS);
-    rlColor4ub(rectColor.r, rectColor.g, rectColor.b, rectColor.a);
+    rlBegin(RL_TRIANGLES);
+    rlColor4ub(color.r, color.g, color.b, color.a);
 
     rlVertex3f(-1, 0, -1);
     rlVertex3f(-1, 0, 1);
     rlVertex3f(1, 0, 1);
 
-    rlVertex3f(1, 0, -1);
+    rlVertex3f(-1, 0, -1);
     rlVertex3f(1, 0, 1);
     rlVertex3f(1, 0, -1);
 

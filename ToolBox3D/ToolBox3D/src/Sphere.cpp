@@ -1,26 +1,5 @@
 #include "Sphere.h"
 
-bool Sphere::Segment_Sphere(const Segment& segment, Sphere sphere, Vector3& interPt, Vector3& interNormal)
-{
-    Vector3 AB = vecFromPt(segment.ptA, segment.ptB);
-    Vector3 CenterA = vecFromPt(sphere.center, segment.ptA);
-
-    float ABsquared = dotProduct(AB, AB);
-    float dotCenterAB = dotProduct(CenterA, AB);
-
-    float delta = powf(dotCenterAB, 2) - 4 * ABsquared * (powf(dotProduct(CenterA, CenterA), 2) - powf(sphere.radius, 2));
-
-    if (delta < 1e-6)
-        return false;
-
-    float T = (-2 * dotCenterAB - sqrt(delta)) / (2 * ABsquared);
-    interPt = segment.ptA + AB * T;
-
-    interNormal = normalize(interPt - sphere.center);
-
-    return true;
-}
-
 Vector3 Sphere::getSphericalCoords(float r, float theta, float phi)
 {
     float x = r * sinf(theta) * cosf(phi);
@@ -61,4 +40,25 @@ void Sphere::myDrawSphere(float lon, float lat)
     }
 
     rlEnd();
+}
+
+bool Sphere::Segment_Sphere(const Segment& segment, Sphere sphere, Vector3& interPt, Vector3& interNormal)
+{
+    Vector3 AB = vecFromPt(segment.ptA, segment.ptB);
+    Vector3 CenterA = vecFromPt(sphere.center, segment.ptA);
+
+    float ABsquared = dotProduct(AB, AB);
+    float dotCenterAB = dotProduct(CenterA, AB);
+
+    float delta = powf(dotCenterAB, 2) - 4 * ABsquared * (powf(dotProduct(CenterA, CenterA), 2) - powf(sphere.radius, 2));
+
+    if (delta < 1e-6)
+        return false;
+
+    float T = (-2 * dotCenterAB - sqrt(delta)) / (2 * ABsquared);
+    interPt = segment.ptA + AB * T;
+
+    interNormal = normalize(interPt - sphere.center);
+
+    return true;
 }

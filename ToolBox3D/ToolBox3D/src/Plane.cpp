@@ -3,13 +3,13 @@
 Plane::Plane(const Vector3& n, const float& d)
 {
 	normal = normalize(n);
-	direction = d;
+	distance = d;
 }
 
 Plane::Plane(const Vector3& n, const Vector3& pos)
 {
 	normal = normalize(n);
-	direction = dotProduct(pos, n);
+	distance = dotProduct(pos, n);
 }
 
 Plane::Plane(const Vector3& vecA, const Vector3& vecB, const Vector3& vecC)
@@ -18,51 +18,93 @@ Plane::Plane(const Vector3& vecA, const Vector3& vecB, const Vector3& vecC)
 	Vector3 AC = vecFromPt(vecA, vecC);
 
 	normal = normalize(vectorProduct(AB, AC));
-	direction = dotProduct(vecA, normal);
-}
-
-bool Plane::Segment_Plane(const Segment& segment, Plane& plane, Vector3& interPt, Vector3& interNormal)
-{
-	Vector3 AB = vecFromPt(segment.ptA, segment.ptB);
-
-	if (dotProduct(AB, plane.normal) < 1e-6)
-		return false;
-
-	Vector3 vector = plane.normal * plane.direction - segment.ptA;
-
-	float T = 2 * dotProduct(vector, plane.normal) / dotProduct(AB, plane.normal);
-
-	if (plane.direction < 1e-6)
-		T = -T;
-
-	interPt = segment.ptA + AB * T;
-	interNormal = plane.normal;
-
-	return true;
+	distance = dotProduct(vecA, normal);
 }
 
 void Plane::myDrawPlane(Plane& plane, const Color& color)
 {
 	rlPushMatrix();
-	//rlTranslatef(centerPos.x, centerPos.y, centerPos.z);
-	//rlScalef(size.x, 1.0f, size.y);
 
-	rlBegin(RL_QUADS);
+	Vector3 center = plane.normal * distance;
+	rlTranslatef(center.x, center.y, center.z);
+
+	Vector3 vect;
+	float angle;
+	QuaternionToAxisAngle(QuaternionFromVector3ToVector3({ 0.f, 1.f, 0.f }, plane.normal), &vect, &angle);
+
+	rlRotatef(vect.x, vect.y, vect.z, angle);
+	rlScalef(1.0f, 1.0f, 1.0f);
+
+	rlBegin(RL_TRIANGLES);
 	rlColor4ub(color.r, color.g, color.b, color.a);
-	rlNormal3f(plane.normal.x, plane.normal.y, plane.normal.z);
 
-	rlVertex3f(-1.0f, 0.0f, -1.0f);
-	rlVertex3f(-1.0f, 0.0f, 1.0f);
-	rlVertex3f(1.0f, 3.0f, 1.0f);
-	rlVertex3f(1.0f, 3.0f, -1.0f);
+	rlVertex3f(-1, 0, -1);
+	rlVertex3f(-1, 0, 1);
+	rlVertex3f(1, 0, 1);
+
+	rlVertex3f(-1, 0, -1);
+	rlVertex3f(1, 0, 1);
+	rlVertex3f(1, 0, -1);
 
 	rlEnd();
 	rlPopMatrix();
 }
 
-void Plane::drawIntersection(const Segment& segment, Plane& plane, Vector3& interPt, Vector3& interNormal)
+bool Plane::Segment_Plane(const Segment& segment, Plane& plane, Vector3& interPt, Vector3& interNormal)
 {
-	if (Segment_Plane(segment, plane, interPt, interNormal))
+	/*Vector3 AB = vecFromPt(segment.ptA, segment.ptB);
+	float dotAB_normal = dotProduct(AB, plane.normal);
+
+	if (dotAB_normal < 1e-6)
+		return false;
+	
+	Vector3 vec = plane.normal * plane.distance - segment.ptA;
+	float T = 2 * dotProduct(vec, plane.normal) / dotAB_normal;
+
+	//float T = (plane.distance - dotProduct(segment.ptA, plane.normal)) / dotAB_normal;
+	if (plane.distance < 1e-6)
+		T = -T;
+
+	if (T < 1e-6 || T > 1e-6)
+		return false;
+
+	interPt = segment.ptA + AB * T;
+	interNormal = plane.normal;
+
+	if (dotAB_normal < 1e-6)
+		interNormal = -interNormal;
+
+	return true;*/
+
+	Vector3 AB = vecFromPt(segment.ptA, segment.ptB);
+	float dotAB_normal = dotProduct(AB, plane.normal);
+
+	if (dotAB_normal >= 1e-6 || dotAB_normal <= 1e-6)
+	{
+
+		Vector3 vec = plane.normal * plane.distance - segment.ptA;
+		float T = dotProduct(vec, plane.normal) / dotAB_normal;
+
+		if (T <= 1e-6 || T >= 1e-6)
+		{
+			interPt = segment.ptA + AB * T;
+			interNormal = plane.normal;
+
+			if (dotAB_normal <= 1e-6)
+				interNormal = -plane.normal;
+
+			return true;
+		}
+
+		return false;
+	}
+
+	return false;
+}
+
+void Plane::drawIntersection(const Segment& segment, Plane& plane, Vector3& interPt, Vector3& interNormal, const Color& color)
+{
+	if (Segment_Plane(segment, plane, interPt, interNormal) == true)
 	{
 		DrawLine3D(segment.ptA, segment.ptB, RED);
 		myDrawPlane(plane, RED);
@@ -70,7 +112,7 @@ void Plane::drawIntersection(const Segment& segment, Plane& plane, Vector3& inte
 
 	else
 	{
-		DrawLine3D(segment.ptA, segment.ptB, GREEN);
-		myDrawPlane(plane, GREEN);
+		DrawLine3D(segment.ptA, segment.ptB, color);
+		myDrawPlane(plane);
 	}
 }
