@@ -32,7 +32,7 @@ void Plane::myDrawPlane(Plane& plane, const Color& color)
 	float angle;
 	QuaternionToAxisAngle(QuaternionFromVector3ToVector3({ 0.f, 1.f, 0.f }, plane.normal), &vect, &angle);
 
-	rlRotatef(vect.x, vect.y, vect.z, angle);
+	rlRotatef(vect.x, vect.y, vect.z, angle * RAD2DEG);
 	rlScalef(1.0f, 1.0f, 1.0f);
 
 	rlBegin(RL_TRIANGLES);
@@ -52,59 +52,32 @@ void Plane::myDrawPlane(Plane& plane, const Color& color)
 
 bool Plane::Segment_Plane(const Segment& segment, Plane& plane, Vector3& interPt, Vector3& interNormal)
 {
-	/*Vector3 AB = vecFromPt(segment.ptA, segment.ptB);
+	Vector3 AB = vecFromPt(segment.ptA, segment.ptB);
 	float dotAB_normal = dotProduct(AB, plane.normal);
 
-	if (dotAB_normal < 1e-6)
+	if (dotAB_normal <= 1e-6)
 		return false;
 	
-	Vector3 vec = plane.normal * plane.distance - segment.ptA;
-	float T = 2 * dotProduct(vec, plane.normal) / dotAB_normal;
+	float T = (plane.distance - dotProduct(segment.ptA, plane.normal)) / dotAB_normal;
 
-	//float T = (plane.distance - dotProduct(segment.ptA, plane.normal)) / dotAB_normal;
-	if (plane.distance < 1e-6)
-		T = -T;
+	//if (plane.distance <= 1e-6)
+	//	T = -T;
 
-	if (T < 1e-6 || T > 1e-6)
+	if (T <= 1e-6 || T >= 1)
 		return false;
 
 	interPt = segment.ptA + AB * T;
 	interNormal = plane.normal;
 
-	if (dotAB_normal < 1e-6)
-		interNormal = -interNormal;
+	//if (dotAB_normal <= 1e-6)
+	//	interNormal = -interNormal;
 
-	return true;*/
-
-	Vector3 AB = vecFromPt(segment.ptA, segment.ptB);
-	float dotAB_normal = dotProduct(AB, plane.normal);
-
-	if (dotAB_normal >= 1e-6 || dotAB_normal <= 1e-6)
-	{
-
-		Vector3 vec = plane.normal * plane.distance - segment.ptA;
-		float T = dotProduct(vec, plane.normal) / dotAB_normal;
-
-		if (T <= 1e-6 || T >= 1e-6)
-		{
-			interPt = segment.ptA + AB * T;
-			interNormal = plane.normal;
-
-			if (dotAB_normal <= 1e-6)
-				interNormal = -plane.normal;
-
-			return true;
-		}
-
-		return false;
-	}
-
-	return false;
+	return true;
 }
 
 void Plane::drawIntersection(const Segment& segment, Plane& plane, Vector3& interPt, Vector3& interNormal, const Color& color)
 {
-	if (Segment_Plane(segment, plane, interPt, interNormal) == true)
+	if (Segment_Plane(segment, plane, interPt, interNormal))
 	{
 		DrawLine3D(segment.ptA, segment.ptB, RED);
 		myDrawPlane(plane, RED);
