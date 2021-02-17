@@ -22,24 +22,6 @@ inline float vectorMagnitude(const Vector3& vec)
 	return sqrtf(powf(vec.x, 2) + powf(vec.y, 2) + powf(vec.z, 2));
 }
 
-inline Vector3 clamp(Vector3& vec, const float& min, const float& max)
-{
-	if (vec.x > max)
-		vec.x = max;
-	else if (vec.x < min)
-		vec.x = min;
-
-	if (vec.y > max)
-		vec.y = max;
-	else if (vec.y < min)
-		vec.y = min;
-
-	if (vec.z > max)
-		vec.z = max;
-	else if (vec.z < min)
-		vec.z = min;
-}
-
 inline Vector3 normalize(const Vector3& vec)
 {
 	return {

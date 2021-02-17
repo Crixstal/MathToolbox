@@ -15,7 +15,7 @@ int main()
 
     Segment segment = { {}, {2.f, 2.f, 1.f} };
 
-    Plane plane = { {1.f, -1.f, 0.f}, 1.f };
+    Plane plane = { {1.f, 1.f, 0.f}, 1.f };
 
     Sphere sphere;
 
@@ -46,6 +46,8 @@ int main()
         rlDisableBackfaceCulling();
 
         app.drawGrid();
+
+        plane.normal = normalize({cosf(GetTime()), sinf(GetTime()), cosf(GetTime() / 3)});
 
         plane.drawIntersection(segment, plane, interPt, interNormal);
         //sphere.myDrawSphere(30.f, 30.f);
