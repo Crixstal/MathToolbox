@@ -6,9 +6,9 @@
 
 struct Cylinder
 {
-    Vector3 ptA;
-    Vector3 ptB;
-    float radius;
+    Vector3 ptA = {};
+    Vector3 ptB = {2.0f, 2.0f, 2.0f};
+    float radius = 1.0f;
     bool infinite = false;
 
     void myDrawCylinder(const Vector3& ptA, const Vector3& ptB, const float& radius, Color color = GREEN);

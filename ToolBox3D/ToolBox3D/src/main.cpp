@@ -14,18 +14,12 @@ int main()
     Vector3 interNormal = {};
 
     Segment segment = { {}, {2.f, 2.f, 1.f} };
-
-    Plane plane = { {1.f, 1.f, 0.f}, 1.f };
-
+    Plane plane;
     Sphere sphere;
-
-    Cylinder cylinder = { {0.f, 0.f, 0.f}, {3.f, 3.f, 0.f}, 1.f };
-
-    Quad quad = { {0.f, 0.f, 0.f}, {2.f, 2.f, 2.f}, {1.f, 1.f, 1.f} };
-
+    Cylinder cylinder;
+    Quad quad;
     Quaternion quaternion = QuaternionFromAxisAngle({0, 1, 0}, PI);
-
-    Box box = { {0.f, 0.f, 0.f}, {1.f, 1.f, 1.f} };
+    Box box;
     
     app.initWindow();
 
@@ -35,7 +29,7 @@ int main()
     {
         UpdateCamera(&camera);
         if (IsKeyDown('Z'))
-            camera.target = { 0.0f, 0.0f, 0.0f };
+            camera.target = {};
 
         BeginDrawing();
 
@@ -47,10 +41,12 @@ int main()
 
         app.drawGrid();
 
-        plane.normal = normalize({cosf(GetTime()), sinf(GetTime()), cosf(GetTime() / 3)});
+        plane.normal = normalize({ cosf(GetTime()), sinf(GetTime()), cosf(GetTime() / 3) });
+        sphere.center = {sinf(GetTime()), cosf(GetTime()), sinf(GetTime())};
 
-        plane.drawIntersection(segment, plane, interPt, interNormal);
-        //sphere.myDrawSphere(30.f, 30.f);
+        //plane.drawIntersection(segment, plane, interPt, interNormal);
+        sphere.drawIntersection(segment, sphere, 20, 20, interPt, interNormal);
+
         //quad.myDrawQuad(quad.center, quad.unitNormal, quad.size, quaternion);
         //cylinder.myDrawCylinder(cylinder.ptA, cylinder.ptB, cylinder.radius);
         //box.myDrawBox(box.center, box.size);

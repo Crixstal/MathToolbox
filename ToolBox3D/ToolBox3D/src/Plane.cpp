@@ -21,7 +21,7 @@ Plane::Plane(const Vector3& vecA, const Vector3& vecB, const Vector3& vecC)
 	distance = dotProduct(vecA, normal);
 }
 
-void Plane::myDrawPlane(Plane& plane, const Color& color)
+void Plane::myDrawPlane(const Plane& plane, Color color)
 {
 	rlPushMatrix();
 
@@ -50,7 +50,7 @@ void Plane::myDrawPlane(Plane& plane, const Color& color)
 	rlPopMatrix();
 }
 
-bool Plane::Segment_Plane(const Segment& segment, Plane& plane, Vector3& interPt, Vector3& interNormal)
+bool Plane::Segment_Plane(const Segment& segment, const Plane& plane, Vector3& interPt, Vector3& interNormal)
 {
 	Vector3 AB = vecFromPt(segment.ptA, segment.ptB);
 	float dotAB_normal = dotProduct(AB, plane.normal);
@@ -72,21 +72,16 @@ bool Plane::Segment_Plane(const Segment& segment, Plane& plane, Vector3& interPt
 	return true;
 }
 
-void Plane::drawIntersection(const Segment& segment, Plane& plane, Vector3& interPt, Vector3& interNormal, const Color& color)
+void Plane::drawIntersection(const Segment& segment, const Plane& plane, Vector3& interPt, Vector3& interNormal, Color color)
 {
 	if (Segment_Plane(segment, plane, interPt, interNormal))
 	{
-		DrawLine3D(segment.ptA, segment.ptB, RED);
-		myDrawPlane(plane, RED);
-		DrawLine3D(plane.normal * distance, 2 * plane.normal, PURPLE);
+		color = RED;
 		DrawSphere(interPt, 0.08, BROWN);
 		DrawLine3D(interPt, 2 * interNormal, PURPLE);
 	}
 
-	else
-	{
-		DrawLine3D(segment.ptA, segment.ptB, color);
-		myDrawPlane(plane);
-		DrawLine3D(plane.normal * distance, 2 * plane.normal, PURPLE);
-	}
+	DrawLine3D(segment.ptA, segment.ptB, color);
+	myDrawPlane(plane, color);
+	DrawLine3D(plane.normal * distance, 2 * plane.normal, PURPLE);
 }

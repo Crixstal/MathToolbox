@@ -1,6 +1,6 @@
 #include "Box.h"
 
-void Box::myDrawBox(const Vector3& center, const Vector3& size, const Color& color)
+void Box::myDrawBox(const Vector3& center, const Vector3& size, Color color)
 {
 	Vector3 i = Vector3RotateByQuaternion({1, 0, 0}, q);
 	Vector3 j = Vector3RotateByQuaternion({0, 1, 0}, q);
@@ -26,12 +26,12 @@ void Box::myDrawBox(const Vector3& center, const Vector3& size, const Color& col
 	rlPopMatrix();
 }
 /*
-bool Box::Segment_Box(const Segment& segment, Box box, Vector3& interPt, Vector3& interNormal)
+bool Box::Segment_Box(const Segment& segment, const Box& box, Vector3& interPt, Vector3& interNormal)
 {
 
 }*/
 
-void Box::myDrawRoundBox(const Vector3& center, const Vector3& size, const Color& color)
+void Box::myDrawRoundBox(const Vector3& center, const Vector3& size, Color color)
 {
 
 }

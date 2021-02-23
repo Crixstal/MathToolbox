@@ -1,6 +1,6 @@
 #include "Cylinder.h"
 
-void DrawCircle3D(Vector3 center, float radius, Vector3 rotationAxis, float rotationAngle, Color color)
+void DrawCircle3D(const Vector3& center, const float& radius, const Vector3& rotationAxis, const float& rotationAngle, Color color)
 {
     if (rlCheckBufferLimit(2 * 36)) rlglDraw();
 

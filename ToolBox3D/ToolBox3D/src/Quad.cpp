@@ -1,6 +1,6 @@
 #include "Quad.h"
 
-void Quad::myDrawQuad(Vector3 center, Vector3 size, Quaternion quaternion, Color color)
+void Quad::myDrawQuad(const Vector3& center, const Vector3& size, const Quaternion& quaternion, Color color)
 {
     if (Vector3LengthSqr(unitNormal) < 1e-4)
         return;
@@ -37,7 +37,7 @@ void Quad::myDrawQuad(Vector3 center, Vector3 size, Quaternion quaternion, Color
 }
 
 /*
-bool Quad::Segment_Quad(const Segment& segment, Quad quad, Vector3& interPt, Vector3& interNormal)
+bool Quad::Segment_Quad(const Segment& segment, const Quad& quad, Vector3& interPt, Vector3& interNormal)
 {
 
 }*/
