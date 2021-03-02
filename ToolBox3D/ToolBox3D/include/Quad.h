@@ -4,11 +4,14 @@
 
 struct Quad
 {
-	Vector3 center = {};
-	Vector3 unitNormal = { 2.0f, 2.0f, 2.0f };
-	Vector3 size = { 1.0f, 1.0f, 1.0f };
+	Vector3 center;
+	Quaternion quaternion;
+	Vector2 extension;
 	
-	void myDrawQuad(const Vector3& center, const Vector3& size, const Quaternion& quaternion, Color color = GREEN);
+	Quad(const Vector3& c, const Quaternion& q, const Vector2& e);
+
+	void myDrawQuad(const Quad& quad, Color color = GREEN);
 	bool Segment_Quad(const Segment& segment, const Quad& quad, Vector3& interPt, Vector3& interNormal);
+	void drawIntersection(const Segment& segment, const Quad& quad, Vector3& interPt, Vector3& interNormal, Color color = GREEN);
 };
 

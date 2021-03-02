@@ -1,5 +1,11 @@
 #include "Sphere.h"
 
+Sphere::Sphere(const Vector3& c, const float& r)
+{
+    center = c;
+    radius = r;
+}
+
 Vector3 Sphere::getSphericalCoords(const float& theta, const float& phi)
 {
     float x = sinf(theta) * cosf(phi);
@@ -58,12 +64,12 @@ bool Sphere::Segment_Sphere(const Segment& segment, const Sphere& sphere, Vector
 
     float delta = (4 * (dotCenterAB * dotCenterAB)) - (4 * ABsquared * (dotProduct(CenterA, CenterA) - sphere.radius * sphere.radius));
 
-    if (delta <= 1e-6)
+    if (delta <= 0)
         return false;
 
     float T = (-2 * dotCenterAB - sqrt(delta)) / (2 * ABsquared);
 
-    if (T <= 1e-6 || T >= 1)
+    if (T <= 0 || T >= 1)
         return false;
 
     interPt = segment.ptA + AB * T;
@@ -79,8 +85,8 @@ void Sphere::drawIntersection(const Segment& segment, const Sphere& sphere, cons
     if (Segment_Sphere(segment, sphere, interPt, interNormal))
     {
         color = RED;
-        DrawSphere(interPt, 0.08, BROWN);
-        DrawLine3D(interPt, interNormal, PURPLE);
+        DrawSphere(interPt, 0.08f, BROWN);
+        DrawLine3D(interPt, interNormal + interPt, PURPLE);
     }
 
     DrawLine3D(segment.ptA, segment.ptB, color);

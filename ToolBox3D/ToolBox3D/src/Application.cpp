@@ -44,5 +44,102 @@ void Application::cameraControls()
     DrawText("- Mouse Wheel to Zoom in-out", 40, 40, 10, DARKGRAY);
     DrawText("- Mouse Wheel Pressed to Pan", 40, 60, 10, DARKGRAY);
     DrawText("- Alt + Mouse Wheel Pressed to Rotate", 40, 80, 10, DARKGRAY);
-    DrawText("- Z to reset position to (0, 0, 0)", 40, 100, 10, DARKGRAY);
+    DrawText("- Z to reset target to (0, 0, 0)", 40, 100, 10, DARKGRAY);
+}
+
+void Application::changeMode()
+{
+    DrawText("Click right/left to change mode", 400, 30, 10, DARKGRAY);
+
+    if (IsKeyPressed(KEY_RIGHT))
+    {
+        ++stateChanger;
+
+        if (stateChanger > 5)
+            stateChanger = 0;
+    }
+
+    if (IsKeyPressed(KEY_LEFT))
+    {
+        --stateChanger;
+
+        if (stateChanger < 0)
+            stateChanger = 0;
+    }
+
+    state = static_cast<State>(stateChanger);
+
+    switch (state)
+    {
+        case State::PLANE:
+            DrawText("Plane", 450, 10, 20, BLACK);
+            break;
+
+        case State::SPHERE:
+            DrawText("Sphere", 450, 10, 20, BLACK);
+            break;
+
+        case State::QUAD:
+            DrawText("Quad", 450, 10, 20, BLACK);
+            break;
+
+        case State::CYLINDER:
+            DrawText("Cylinder", 450, 10, 20, BLACK);
+            break;
+
+        case State::BOX:
+            DrawText("Box", 450, 10, 20, BLACK);
+            break;
+
+        case State::ROUND_BOX:
+            DrawText("Round box", 450, 10, 20, BLACK);
+            break;
+
+        default: break;
+    }
+}
+
+void Application::drawIntersection()
+{
+    Vector3 interPt = {};
+    Vector3 interNormal = {};
+    Segment segment = { {-2.0f, -2.0f, -1.0f}, {2.f, 2.f, 1.f} };
+    Plane plane({ 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f });
+    Sphere sphere({}, 1.0f);
+    Quad quad({}, QuaternionIdentity(), { 1.0f, 2.0f });
+    Cylinder cylinder({}, { 2.0f, 2.0f, 2.0f }, 1.0f, false);
+    Box box({}, { 1.0f, 1.0f, 1.0f }, QuaternionIdentity());
+   
+    float time = GetTime();
+    Vector3 movement = { sinf(time), cosf(time), sinf(time) };
+
+    switch (state)
+    {
+        case State::PLANE: 
+            plane.normal = normalize(movement);
+            plane.drawIntersection(segment, plane, interPt, interNormal);
+            break;
+
+        case State::SPHERE: 
+            sphere.center = movement;
+            sphere.drawIntersection(segment, sphere, 20, 20, interPt, interNormal);
+            break;
+
+        case State::QUAD:
+            quad.center = movement;
+            quad.quaternion = QuaternionMultiply(quad.quaternion, QuaternionFromAxisAngle({ 0.0f, 0.0f, 1.0f }, PI * GetFrameTime() * 0.1f));
+            quad.drawIntersection(segment, quad, interPt, interNormal);
+            break;
+
+        case State::CYLINDER:
+            break;
+
+        case State::BOX:
+            break;
+
+        case State::ROUND_BOX:
+            break;
+
+        default: break;
+    }
 }

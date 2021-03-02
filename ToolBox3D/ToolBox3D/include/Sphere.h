@@ -4,8 +4,10 @@
 
 struct Sphere
 {
-	Vector3 center = {};
-	float radius = 1.0f;
+	Vector3 center;
+	float radius;
+
+	Sphere(const Vector3& c, const float& r);
 
 	Vector3 getSphericalCoords(const float& theta, const float& phi);
 	void myDrawSphere(const int& resLong, const int& resLat, const float& startLong = 0, const float& startLat = 0, const float& endLong = 2 * PI, const float& endLat = PI, Color color = GREEN);

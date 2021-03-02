@@ -1,5 +1,13 @@
 #include "Cylinder.h"
 
+Cylinder::Cylinder(const Vector3& A, const Vector3& B, const float& r, const bool& isInfinite)
+{
+    ptA = A;
+    ptB = B;
+    radius = r;
+    infinite = isInfinite;
+}
+
 void DrawCircle3D(const Vector3& center, const float& radius, const Vector3& rotationAxis, const float& rotationAngle, Color color)
 {
     if (rlCheckBufferLimit(2 * 36)) rlglDraw();

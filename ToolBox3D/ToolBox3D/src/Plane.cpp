@@ -30,7 +30,7 @@ void Plane::myDrawPlane(const Plane& plane, Color color)
 
 	Vector3 vect;
 	float angle;
-	QuaternionToAxisAngle(QuaternionFromVector3ToVector3({ 0.f, 1.f, 0.f }, plane.normal), &vect, &angle);
+	QuaternionToAxisAngle(QuaternionFromVector3ToVector3({ 0.0f, 1.0f, 0.0f }, plane.normal), &vect, &angle);
 
 	rlRotatef(angle * RAD2DEG, vect.x, vect.y, vect.z);
 	rlScalef(1.0f, 1.0f, 1.0f);
@@ -55,12 +55,12 @@ bool Plane::Segment_Plane(const Segment& segment, const Plane& plane, Vector3& i
 	Vector3 AB = vecFromPt(segment.ptA, segment.ptB);
 	float dotAB_normal = dotProduct(AB, plane.normal);
 
-	if (dotAB_normal <= 1e-6)
+	if (fabsf(dotAB_normal) <= 1e-6)
 		return false;
 	
 	float T = (plane.distance - dotProduct(segment.ptA, plane.normal)) / dotAB_normal;
 
-	if (T <= 1e-6 || T >= 1)
+	if (T <= 0 || T >= 1)
 		return false;
 
 	interPt = segment.ptA + AB * T;
@@ -74,14 +74,16 @@ bool Plane::Segment_Plane(const Segment& segment, const Plane& plane, Vector3& i
 
 void Plane::drawIntersection(const Segment& segment, const Plane& plane, Vector3& interPt, Vector3& interNormal, Color color)
 {
+	Vector3 center = plane.normal * plane.distance;
+
 	if (Segment_Plane(segment, plane, interPt, interNormal))
 	{
 		color = RED;
-		DrawSphere(interPt, 0.08, BROWN);
-		DrawLine3D(interPt, 2 * interNormal, PURPLE);
+		DrawSphere(interPt, 0.08f, BROWN);
+		DrawLine3D(interPt, interNormal + interPt, PURPLE);
 	}
 
 	DrawLine3D(segment.ptA, segment.ptB, color);
 	myDrawPlane(plane, color);
-	DrawLine3D(plane.normal * distance, 2 * plane.normal, PURPLE);
+	DrawLine3D(center, plane.normal + center, PURPLE);
 }

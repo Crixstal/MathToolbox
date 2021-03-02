@@ -1,7 +1,14 @@
 #include "Box.h"
 
-void Box::myDrawBox(const Vector3& center, const Vector3& size, Color color)
+Box::Box(const Vector3& c, const Vector3& s, const Quaternion& q)
 {
+	center = c;
+	size = s;
+	quaternion = q;
+}
+
+void Box::myDrawBox(const Vector3& center, const Vector3& size, Color color)
+{/*
 	Vector3 i = Vector3RotateByQuaternion({1, 0, 0}, q);
 	Vector3 j = Vector3RotateByQuaternion({0, 1, 0}, q);
 	Vector3 k = Vector3RotateByQuaternion({0, 0, 1}, q);
@@ -23,7 +30,7 @@ void Box::myDrawBox(const Vector3& center, const Vector3& size, Color color)
 	quad.myDrawQuad(-k * size.z, size, qA, color); // back
 
 
-	rlPopMatrix();
+	rlPopMatrix();*/
 }
 /*
 bool Box::Segment_Box(const Segment& segment, const Box& box, Vector3& interPt, Vector3& interNormal)
