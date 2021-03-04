@@ -37,7 +37,7 @@ void Quad::myDrawQuad(const Quad& quad, Color color)
 
 bool Quad::Segment_Quad(const Segment& segment, const Quad& quad, Vector3& interPt, Vector3& interNormal)
 {
-    Vector3 normal = Vector3RotateByQuaternion({ 0, 1, 0 }, quad.quaternion);
+    Vector3 normal = normalize(Vector3RotateByQuaternion({ 0.0f, 1.0f, 0.0f }, quad.quaternion));
 
     Plane plane (normal, quad.center);
 
@@ -57,7 +57,7 @@ bool Quad::Segment_Quad(const Segment& segment, const Quad& quad, Vector3& inter
 
 void Quad::drawIntersection(const Segment& segment, const Quad& quad, Vector3& interPt, Vector3& interNormal, Color color)
 {
-    Vector3 normal = Vector3RotateByQuaternion({ 0, 1, 0 }, quad.quaternion);
+    Vector3 normal = Vector3RotateByQuaternion({ 0.0f, 1.0f, 0.0f }, quad.quaternion);
 
     if (Segment_Quad(segment, quad, interPt, interNormal))
     {

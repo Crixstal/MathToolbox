@@ -7,6 +7,7 @@
 #include "Sphere.h"
 #include "Cylinder.h"
 #include "Box.h"
+#include "Capsule.h"
 
 struct Application
 {
@@ -16,12 +17,15 @@ struct Application
 		SPHERE,
 		QUAD,
 		CYLINDER,
+		CAPSULE,
 		BOX,
-		ROUND_BOX
+		ROUND_BOX,
+		BOUNCING_BALL
 	};
 
-	int stateChanger = 0;
-	State state = State::PLANE;
+	int stateChanger = 3;
+	State state;
+	bool isInfinite = false;
 	
 	void initWindow();
 	Camera3D initCamera();

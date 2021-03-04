@@ -76,6 +76,15 @@ inline Vector3 operator*(const Vector3& vecA, const Vector3& vecB)
 	};
 }
 
+inline Vector3 operator/(const Vector3& vec, const float& k)
+{
+	return {
+		vec.x / k,
+		vec.y / k,
+		vec.z / k
+	};
+};
+
 inline Vector3 operator+(const Vector3& vecA, const Vector3& vecB)
 { 
 	return {

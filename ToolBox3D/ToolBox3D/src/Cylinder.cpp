@@ -1,106 +1,80 @@
 #include "Cylinder.h"
 
-Cylinder::Cylinder(const Vector3& A, const Vector3& B, const float& r, const bool& isInfinite)
+Cylinder::Cylinder(const Vector3& P, const Vector3& Q, const float& r, const bool& infinite)
 {
-    ptA = A;
-    ptB = B;
+    ptP = P;
+    ptQ = Q;
     radius = r;
-    infinite = isInfinite;
+    isInfinite = infinite;
 }
 
-void DrawCircle3D(const Vector3& center, const float& radius, const Vector3& rotationAxis, const float& rotationAngle, Color color)
+void Cylinder::myDrawCylinder(const Cylinder& cyl, Color color)
 {
-    if (rlCheckBufferLimit(2 * 36)) rlglDraw();
+    Vector3 PQ = vecFromPt(cyl.ptP, cyl.ptQ);
+    float length = vectorMagnitude(PQ);
+    Vector3 center = (cyl.ptP + cyl.ptQ) / 2.0f;
+
+    if (isInfinite)
+        length += 5.0f;
 
     rlPushMatrix();
     rlTranslatef(center.x, center.y, center.z);
-    rlRotatef(rotationAngle, rotationAxis.x, rotationAxis.y, rotationAxis.z);
 
-    rlBegin(RL_LINES);
-    for (int i = 0; i < 360; i += 10)
-    {
-        rlColor4ub(color.r, color.g, color.b, color.a);
-
-        rlVertex3f(sinf(DEG2RAD * i) * radius, cosf(DEG2RAD * i) * radius, 0.0f);
-        rlVertex3f(sinf(DEG2RAD * (i + 10)) * radius, cosf(DEG2RAD * (i + 10)) * radius, 0.0f);
-    }
-    rlEnd();
-    rlPopMatrix();
-}
-
-void Cylinder::myDrawCylinder(const Vector3& ptA, const Vector3& ptB, const float& radius, Color color)
-{
-    unsigned int sides = 20.f;
-
-    int numVertex = sides * 6;
-    if (rlCheckBufferLimit(numVertex)) rlglDraw();
-
-    rlPushMatrix();
-    rlTranslatef(ptA.x, ptA.y, ptA.z);
-
-    float angle = 30;
-    rlRotatef(angle, ptB.x, ptB.y, ptB.z);
+    Vector3 vect;
+    float angle;
+    QuaternionToAxisAngle(QuaternionFromVector3ToVector3({ 0.0f, 1.0f, 0.0f }, normalize(PQ)), &vect, &angle);
+    rlRotatef(angle * RAD2DEG, vect.x, vect.y, vect.z);
+    rlScalef(cyl.radius, length, cyl.radius);
 
     rlBegin(RL_TRIANGLES);
     rlColor4ub(color.r, color.g, color.b, color.a);
 
-    // Draw Body -------------------------------------------------------------------------------------
+    unsigned int sides = 20;
+
     for (int i = 0; i < 360; i += 360 / sides)
     {
-        rlVertex3f(sinf(DEG2RAD * i) * radius, 0, cosf(DEG2RAD * i) * radius); //Bottom Left
-        rlVertex3f(sinf(DEG2RAD * (i + 360 / sides)) * radius, 0, cosf(DEG2RAD * (i + 360 / sides)) * radius); //Bottom Right
-        rlVertex3f(sinf(DEG2RAD * (i + 360 / sides)) * radius, ptB.y, cosf(DEG2RAD * (i + 360 / sides)) * radius); //Top Right
+        Vector3 calcul1 = { sinf(DEG2RAD * i) * cyl.radius, -0.5f, cosf(DEG2RAD * i) * cyl.radius };
+        Vector3 calcul2 = { sinf(DEG2RAD * (i + 360 / sides)) * cyl.radius, 0.5f, cosf(DEG2RAD * (i + 360 / sides)) * cyl.radius };
+        Vector3 calcul3 = { sinf(DEG2RAD * (i + 360 / sides)) * cyl.radius, -0.5f, cosf(DEG2RAD * (i + 360 / sides))* cyl.radius };
+        Vector3 calcul4 = { sinf(DEG2RAD * i) * cyl.radius, 0.5f, cosf(DEG2RAD * i) * cyl.radius };
 
-        rlVertex3f(sinf(DEG2RAD * i) * radius, ptB.y, cosf(DEG2RAD * i) * radius); //Top Left
-        rlVertex3f(sinf(DEG2RAD * i) * radius, 0, cosf(DEG2RAD * i) * radius); //Bottom Left
-        rlVertex3f(sinf(DEG2RAD * (i + 360 / sides)) * radius, ptB.y, cosf(DEG2RAD * (i + 360 / sides)) * radius); //Top Right
+        rlVertex3f(calcul1.x, calcul1.y, calcul1.z);
+        rlVertex3f(calcul3.x, calcul3.y, calcul3.z);
+        rlVertex3f(calcul2.x, calcul2.y, calcul2.z);
+
+        rlVertex3f(calcul4.x, calcul4.y, calcul4.z);
+        rlVertex3f(calcul1.x, calcul1.y, calcul1.z);
+        rlVertex3f(calcul2.x, calcul2.y, calcul2.z);
+
+        if (!isInfinite)
+        {
+            rlVertex3f(0.0f, -0.5f, 0.0f);
+            rlVertex3f(calcul1.x, calcul1.y, calcul1.z);
+            rlVertex3f(calcul3.x, calcul3.y, calcul3.z);
+
+            rlVertex3f(0.0f, 0.5f, 0.0f);
+            rlVertex3f(calcul4.x, calcul4.y, calcul4.z);
+            rlVertex3f(calcul2.x, calcul2.y, calcul2.z);
+        }
     }
 
-    // Draw Circle A (Base) --------------------------------------------------------------------------------------
-    for (int i = 0; i < 360; i += 360 / sides)
-    {
-        rlVertex3f(ptA.x, ptA.y, ptA.z);
-        
-        rlVertex3f(sinf(DEG2RAD * (i + 360 / sides)) * radius, ptA.y, cosf(DEG2RAD * (i + 360 / sides)) * radius);
-        rlVertex3f(sinf(DEG2RAD * i) * radius, ptA.y, cosf(DEG2RAD * i) * radius);
-    }
-    
-    // Draw Circle B (Top) -----------------------------------------------------------------------------------------
-    for (int i = 0; i < 360; i += 360 / sides)
-    {
-        rlVertex3f(ptB.x, ptB.y, ptB.z);
-
-        rlVertex3f(sinf(DEG2RAD * i) * radius, ptB.y, cosf(DEG2RAD * i) * radius);
-        rlVertex3f(sinf(DEG2RAD * (i + 360 / sides)) * radius, ptB.y, cosf(DEG2RAD * (i + 360 / sides)) * radius);
-    }
     rlEnd();
     rlPopMatrix();
 }
 
-bool Cylinder::Segment_CylinderInfinite(const Segment& segment, const Cylinder& cylinder, Vector3& intersection)
+bool Cylinder::Segment_CylinderInfinite(const Segment& segment, const Cylinder& cyl, Vector3& interPt, Vector3& interNormal)
 {
-    Vector3 P = cylinder.ptA;
-    Vector3 Q = cylinder.ptB;
-    float radius = cylinder.radius;
-
     Vector3 AB = vecFromPt(segment.ptA, segment.ptB);
-    Vector3 PQ = vecFromPt(P, Q);
-    Vector3 PA = vecFromPt(P, segment.ptA);
+    Vector3 PQ = vecFromPt(cyl.ptP, cyl.ptQ);
+    Vector3 PA = vecFromPt(cyl.ptP, segment.ptA);
 
     float a = dotProduct(PQ, PQ) * dotProduct(AB, AB) - dotProduct(PQ, AB) * dotProduct(PQ, AB);
     if (a == 0)
-    {
-        std::cout << "a = 0\n" << std::endl;
         return false;
-    }
 
-    float c = dotProduct(PQ, PQ) * (dotProduct(PA, PA) - (radius * radius)) - (dotProduct(PA, PQ) * dotProduct(PA, PQ));
+    float c = dotProduct(PQ, PQ) * (dotProduct(PA, PA) - (cyl.radius * cyl.radius)) - (dotProduct(PA, PQ) * dotProduct(PA, PQ));
     if (c < 0)
-    {
-        std::cout << "c < 0\n" << std::endl;
-        std::cout << "c = " << c << '\n' << std::endl;
         return false;
-    }
 
     float b = dotProduct(PQ, PQ) * dotProduct(PA, AB) - dotProduct(PQ, AB) * dotProduct(PA, PQ);
 
@@ -112,51 +86,76 @@ bool Cylinder::Segment_CylinderInfinite(const Segment& segment, const Cylinder& 
     if (root < 0 || root > 1)
         return false;
 
-    intersection = segment.ptA + root * AB;
+    interPt = segment.ptA + root * AB;
+
+    Plane interPlane(normalize(PQ), interPt);
+    Vector3 O, placeholder;
+    Plane::Segment_Plane({ cyl.ptP, cyl.ptQ }, interPlane, O, placeholder);
+    interNormal = normalize(interPt - O);
+
     return true;
 }
 
-bool Cylinder::Segment_Cylinder(const Segment& segment, const Cylinder& cylinder, Vector3& intersection)
+bool Cylinder::Segment_Cylinder(const Segment& segment, const Cylinder& cyl, Vector3& interPt, Vector3& interNormal)
 {
-    Vector3 P = cylinder.ptA;
-    Vector3 Q = cylinder.ptB;
-    float radius = cylinder.radius;
+    if (!Segment_CylinderInfinite(segment, cyl, interPt, interNormal))
+        interPt = segment.ptA;
 
-    Vector3 AB = vecFromPt(segment.ptA, segment.ptB);
-    Vector3 PQ = vecFromPt(P, Q);
-    Vector3 PA = vecFromPt(P, segment.ptA);
+    Vector3 PQ = vecFromPt(cyl.ptP, cyl.ptQ);
+    Vector3 PM = vecFromPt(cyl.ptP, interPt);
 
-    //for transform into cylinder non inf
-    //Vector3 PM = collisonLineSeg({PQ, P}, seg);
-
-    //if (dotProduct(PM, PQ) < 0 || dotProduct(PM, PQ) > dotProduct(PQ, PQ))
-    //    return false;
-
-    float a = dotProduct(PQ, PQ) * dotProduct(AB, AB) - dotProduct(PQ, AB) * dotProduct(PQ, AB);
-    if (a == 0)
+    if (dotProduct(PM, PQ) < 0 || dotProduct(PM, PQ) > dotProduct(PQ, PQ))
     {
-        std::cout << "a = 0\n" << std::endl;
-        return false;
+        Plane Pplane(normalize(-PQ), cyl.ptP);
+        Plane Qplane(normalize(PQ), cyl.ptQ);
+
+        float lengthDiff = vectorMagnitude(cyl.ptP - segment.ptA) - vectorMagnitude(cyl.ptQ - segment.ptB);
+
+        if (lengthDiff > 0 && Plane::Segment_Plane(segment, Qplane, interPt, interNormal))
+        {
+            float len = vectorMagnitude(cyl.ptQ - interPt);
+
+            if (vectorMagnitude(cyl.ptQ - interPt) <= cyl.radius * cyl.radius)
+                return true;
+        }
+
+        else if (lengthDiff < 0 && Plane::Segment_Plane(segment, Pplane, interPt, interNormal))
+            if (vectorMagnitude(cyl.ptP - interPt) <= cyl.radius * cyl.radius)
+                return true;
     }
 
-    float c = dotProduct(PQ, PQ) * (dotProduct(PA, PA) - (radius * radius)) - (dotProduct(PA, PQ) * dotProduct(PA, PQ));
-    if (c < 0)
+    else
+        return true;
+
+    return false;
+}
+
+void Cylinder::drawIntersection(const Segment& segment, const Cylinder& cyl, Vector3& interPt, Vector3& interNormal, Color color)
+{
+    Vector3 normal = normalize(vecFromPt(cyl.ptP, cyl.ptQ));
+    Vector3 center = (cyl.ptP + cyl.ptQ) / 2.0f;
+
+    if (isInfinite)
     {
-        std::cout << "c < 0\n" << std::endl;
-        std::cout << "c = " << c << '\n' << std::endl;
-        return false;
+        if (Segment_CylinderInfinite(segment, cyl, interPt, interNormal))
+        {
+            color = RED;
+            DrawSphere(interPt, 0.08f, BROWN);
+            DrawLine3D(interPt, interNormal + interPt, PURPLE);
+        }
     }
 
-    float b = dotProduct(PQ, PQ) * dotProduct(PA, AB) - dotProduct(PQ, AB) * dotProduct(PA, PQ);
+    else
+    {
+        if (Segment_Cylinder(segment, cyl, interPt, interNormal))
+        {
+            color = RED;
+            DrawSphere(interPt, 0.08f, BROWN);
+            DrawLine3D(interPt, interNormal + interPt, PURPLE);
+        }
+    }
 
-    float delta = (b * b) - (a * c);
-    if (delta < 0)
-        return false;
-
-    float root = (-b - sqrt(delta)) / a;
-    if (root < 0 || root > 1)
-        return false;
-
-    intersection = segment.ptA + root * AB;
-    return true;
+    DrawLine3D(segment.ptA, segment.ptB, color);
+    myDrawCylinder(cyl, color);
+    DrawLine3D(center, 3 * normal + center, PURPLE);
 }

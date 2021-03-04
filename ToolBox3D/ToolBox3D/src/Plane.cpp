@@ -66,7 +66,7 @@ bool Plane::Segment_Plane(const Segment& segment, const Plane& plane, Vector3& i
 	interPt = segment.ptA + AB * T;
 	interNormal = plane.normal;
 
-	if (dotAB_normal <= 0)
+	if (dotAB_normal > 0)
 		interNormal = -interNormal;
 
 	return true;

@@ -3,17 +3,19 @@
 #include <iostream>
 
 #include "Maths.h"
+#include "Plane.h"
 
 struct Cylinder
 {
-    Vector3 ptA;
-    Vector3 ptB;
+    Vector3 ptP;
+    Vector3 ptQ;
     float radius;
-    bool infinite;
+    bool isInfinite;
 
-    Cylinder(const Vector3& A, const Vector3& B, const float& r, const bool& isInfinite);
+    Cylinder(const Vector3& P, const Vector3& Q, const float& r, const bool& infinite);
 
-    void myDrawCylinder(const Vector3& ptA, const Vector3& ptB, const float& radius, Color color = GREEN);
-    bool Segment_CylinderInfinite(const Segment& segment, const Cylinder& cylinder, Vector3& intersection);
-    bool Segment_Cylinder(const Segment& segment, const Cylinder& cylinder, Vector3& intersection);
+    void myDrawCylinder(const Cylinder& cyl, Color color = GREEN);
+    bool Segment_CylinderInfinite(const Segment& segment, const Cylinder& cyl, Vector3& interPt, Vector3& interNormal);
+    bool Segment_Cylinder(const Segment& segment, const Cylinder& cyl, Vector3& interPt, Vector3& interNormal);
+    void drawIntersection(const Segment& segment, const Cylinder& cyl, Vector3& interPt, Vector3& interNormal, Color color = GREEN);
 };

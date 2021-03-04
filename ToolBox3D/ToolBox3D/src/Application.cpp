@@ -55,7 +55,7 @@ void Application::changeMode()
     {
         ++stateChanger;
 
-        if (stateChanger > 5)
+        if (stateChanger > 7)
             stateChanger = 0;
     }
 
@@ -66,6 +66,12 @@ void Application::changeMode()
         if (stateChanger < 0)
             stateChanger = 0;
     }
+
+    if (IsKeyPressed(KEY_UP))
+        isInfinite = true;
+
+    if (IsKeyPressed(KEY_DOWN))
+        isInfinite = false;
 
     state = static_cast<State>(stateChanger);
 
@@ -85,6 +91,18 @@ void Application::changeMode()
 
         case State::CYLINDER:
             DrawText("Cylinder", 450, 10, 20, BLACK);
+            DrawText("Click up/down to change cylinder", 400, 40, 10, DARKGRAY);
+
+            if (isInfinite == true)
+                DrawText("(infinite)", 536, 10, 20, BLACK);
+
+            if (isInfinite == false)
+                DrawText("(finite)", 536, 10, 20, BLACK);
+
+            break;
+
+        case State::CAPSULE:
+            DrawText("Capsule", 450, 10, 20, BLACK);
             break;
 
         case State::BOX:
@@ -93,6 +111,10 @@ void Application::changeMode()
 
         case State::ROUND_BOX:
             DrawText("Round box", 450, 10, 20, BLACK);
+            break;
+
+        case State::BOUNCING_BALL:
+            DrawText("Bouncing ball", 450, 10, 20, BLACK);
             break;
 
         default: break;
@@ -104,11 +126,12 @@ void Application::drawIntersection()
     Vector3 interPt = {};
     Vector3 interNormal = {};
     Segment segment = { {-2.0f, -2.0f, -1.0f}, {2.f, 2.f, 1.f} };
-    Plane plane({ 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f });
-    Sphere sphere({}, 1.0f);
-    Quad quad({}, QuaternionIdentity(), { 1.0f, 2.0f });
-    Cylinder cylinder({}, { 2.0f, 2.0f, 2.0f }, 1.0f, false);
-    Box box({}, { 1.0f, 1.0f, 1.0f }, QuaternionIdentity());
+    Plane plane ({ 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f });
+    Sphere sphere ({}, 1.0f);
+    Quad quad ({}, QuaternionIdentity(), { 1.0f, 2.0f });
+    Cylinder cyl ({}, { 0.0f, 3.0f, 0.0f }, 1.0f, isInfinite);
+    Box box ({}, { 1.0f, 1.0f, 1.0f }, QuaternionIdentity());
+    Capsule capsule;
    
     float time = GetTime();
     Vector3 movement = { sinf(time), cosf(time), sinf(time) };
@@ -132,12 +155,20 @@ void Application::drawIntersection()
             break;
 
         case State::CYLINDER:
+            cyl.ptP = movement;
+            cyl.drawIntersection(segment, cyl, interPt, interNormal);
+            break;
+
+        case State::CAPSULE:
             break;
 
         case State::BOX:
             break;
 
         case State::ROUND_BOX:
+            break;
+
+        case State::BOUNCING_BALL:
             break;
 
         default: break;
