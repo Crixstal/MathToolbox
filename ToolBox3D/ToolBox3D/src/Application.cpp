@@ -125,13 +125,13 @@ void Application::drawIntersection()
 {
     Vector3 interPt = {};
     Vector3 interNormal = {};
-    Segment segment = { {-2.0f, -2.0f, -1.0f}, {2.f, 2.f, 1.f} };
+    Segment segment = { {}, {2.f, 2.f, 1.f} };
     Plane plane ({ 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f });
     Sphere sphere ({}, 1.0f);
     Quad quad ({}, QuaternionIdentity(), { 1.0f, 2.0f });
     Cylinder cyl ({}, { 0.0f, 3.0f, 0.0f }, 1.0f, isInfinite);
+    Capsule capsule ({}, { 0.0f, 3.0f, 0.0f }, 1.0f);
     Box box ({}, { 1.0f, 1.0f, 1.0f }, QuaternionIdentity());
-    Capsule capsule;
    
     float time = GetTime();
     Vector3 movement = { sinf(time), cosf(time), sinf(time) };
@@ -163,6 +163,8 @@ void Application::drawIntersection()
             break;
 
         case State::BOX:
+            box.center = { sinf(time) * 2, cosf(time), sinf(time) };
+            box.drawIntersection(segment, box, interPt, interNormal);
             break;
 
         case State::ROUND_BOX:

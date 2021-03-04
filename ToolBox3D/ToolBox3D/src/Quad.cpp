@@ -35,7 +35,7 @@ void Quad::myDrawQuad(const Quad& quad, Color color)
     rlPopMatrix();
 }
 
-bool Quad::Segment_Quad(const Segment& segment, const Quad& quad, Vector3& interPt, Vector3& interNormal)
+bool Segment_Quad(const Segment& segment, const Quad& quad, Vector3& interPt, Vector3& interNormal)
 {
     Vector3 normal = normalize(Vector3RotateByQuaternion({ 0.0f, 1.0f, 0.0f }, quad.quaternion));
 
@@ -44,8 +44,8 @@ bool Quad::Segment_Quad(const Segment& segment, const Quad& quad, Vector3& inter
     if (!Plane::Segment_Plane(segment, plane, interPt, interNormal))
         return false;
 
-    Vector3 i = Vector3RotateByQuaternion({0.0f, 1.0f, 0.0f}, quad.quaternion);
-    Vector3 j = Vector3RotateByQuaternion({1.0f, 0.0f, 1.0f}, quad.quaternion);
+    Vector3 i = Vector3RotateByQuaternion({ 1.0f, 1.0f, 0.0f }, quad.quaternion);
+    Vector3 j = Vector3RotateByQuaternion({ 0.0f, 0.0f, 1.0f }, quad.quaternion);
     Vector3 vect = interPt - quad.center;
 
     if (fabsf(dotProduct(i, vect)) > quad.extension.x ||
@@ -57,7 +57,7 @@ bool Quad::Segment_Quad(const Segment& segment, const Quad& quad, Vector3& inter
 
 void Quad::drawIntersection(const Segment& segment, const Quad& quad, Vector3& interPt, Vector3& interNormal, Color color)
 {
-    Vector3 normal = Vector3RotateByQuaternion({ 0.0f, 1.0f, 0.0f }, quad.quaternion);
+    Vector3 normal = normalize(Vector3RotateByQuaternion({ 0.0f, 1.0f, 0.0f }, quad.quaternion));
 
     if (Segment_Quad(segment, quad, interPt, interNormal))
     {

@@ -11,9 +11,7 @@ struct Box
 
 	Box(const Vector3& c, const Vector3& s, const Quaternion& q);
 
-	void myDrawBox(const Vector3& center, const Vector3& size, Color color = GREEN);
-	bool Segment_Box(const Segment& segment, const Box& box, Vector3& interPt, Vector3& interNormal);
-
-	void myDrawRoundBox(const Vector3& center, const Vector3& size, Color color = GREEN);
-	//bool Segment_RoundBox(const Segment& segment, const Box& box, Vector3& interPt, Vector3& interNormal);
+	void myDrawBox(const Box& box, Color color = GREEN);
+	bool Segment_Box(const Segment& segment, Vector3& interPt, Vector3& interNormal);
+	void drawIntersection(const Segment& segment, const Box& box, Vector3& interPt, Vector3& interNormal, Color color = GREEN);
 };
