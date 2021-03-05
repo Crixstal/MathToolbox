@@ -54,15 +54,15 @@ void Sphere::myDrawSphere(const int& resLong, const int& resLat, const float& st
     rlPopMatrix();
 }
 
-bool Sphere::Segment_Sphere(const Segment& segment, const Sphere& sphere, Vector3& interPt, Vector3& interNormal)
+bool Sphere::Segment_Sphere(const Segment& segment, Vector3& interPt, Vector3& interNormal)
 {
     Vector3 AB = vecFromPt(segment.ptA, segment.ptB);
-    Vector3 CenterA = vecFromPt(sphere.center, segment.ptA);
+    Vector3 CenterA = vecFromPt(center, segment.ptA);
     
     float ABsquared = dotProduct(AB, AB);
     float dotCenterAB = dotProduct(CenterA, AB);
 
-    float delta = (4 * (dotCenterAB * dotCenterAB)) - (4 * ABsquared * (dotProduct(CenterA, CenterA) - sphere.radius * sphere.radius));
+    float delta = (4 * (dotCenterAB * dotCenterAB)) - (4 * ABsquared * (dotProduct(CenterA, CenterA) - radius * radius));
 
     if (delta <= 0)
         return false;
@@ -74,15 +74,15 @@ bool Sphere::Segment_Sphere(const Segment& segment, const Sphere& sphere, Vector
 
     interPt = segment.ptA + AB * T;
 
-    Vector3 normal = interPt - sphere.center;
+    Vector3 normal = interPt - center;
     interNormal = normalize(normal);
 
     return true;
 }
 
-void Sphere::drawIntersection(const Segment& segment, const Sphere& sphere, const int& resLong, const int& resLat, Vector3& interPt, Vector3& interNormal, Color color)
+void Sphere::drawIntersection(const Segment& segment, const int& resLong, const int& resLat, Vector3& interPt, Vector3& interNormal, Color color)
 {
-    if (Segment_Sphere(segment, sphere, interPt, interNormal))
+    if (Segment_Sphere(segment, interPt, interNormal))
     {
         color = RED;
         DrawSphere(interPt, 0.08f, BROWN);

@@ -3,19 +3,19 @@
 #include <raylib.h>
 
 #include "Plane.h"
-#include "Quad.h"
 #include "Sphere.h"
+#include "Quad.h"
 #include "Cylinder.h"
-#include "Box.h"
 #include "Capsule.h"
+#include "Box.h"
 
 struct Application
 {
 	enum class State
 	{
 		PLANE,
-		SPHERE,
 		QUAD,
+		SPHERE,
 		CYLINDER,
 		CAPSULE,
 		BOX,
@@ -23,7 +23,7 @@ struct Application
 		BOUNCING_BALL
 	};
 
-	int stateChanger = 5;
+	int stateChanger = 3;
 	State state;
 	bool isInfinite = false;
 	

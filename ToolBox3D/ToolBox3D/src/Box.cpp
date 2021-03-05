@@ -7,80 +7,76 @@ Box::Box(const Vector3& c, const Vector3& s, const Quaternion& q)
 	quaternion = q;
 }
 
-void Box::myDrawBox(const Box& box, Color color)
+void Box::myDrawBox(Color color)
 {
-	Vector3 i = Vector3RotateByQuaternion({1, 0, 0}, box.quaternion);
-	Vector3 j = Vector3RotateByQuaternion({0, 1, 0}, box.quaternion);
-	Vector3 k = Vector3RotateByQuaternion({0, 0, 1}, box.quaternion);
+	Vector3 i = Vector3RotateByQuaternion({1, 0, 0}, quaternion);
+	Vector3 j = Vector3RotateByQuaternion({0, 1, 0}, quaternion);
+	Vector3 k = Vector3RotateByQuaternion({0, 0, 1}, quaternion);
 
 	Quaternion qA = QuaternionFromAxisAngle({1, 0, 0}, PI / 2);
 	Quaternion qB = QuaternionFromAxisAngle({0, 0, 1}, PI / 2);
 
 	rlPushMatrix();
-	rlTranslatef(box.center.x, box.center.y, box.center.z);
+	rlTranslatef(center.x, center.y, center.z);
 
-	Quad quad1 (i * box.size.x, qB, { box.size.x, box.size.y });
-	Quad quad2 (-i * box.size.x, qB, { box.size.x, box.size.y });
-	Quad quad3 (j * box.size.y, box.quaternion, { box.size.x, box.size.y });
-	Quad quad4 (-j * box.size.y, box.quaternion, { box.size.x, box.size.y });
-	Quad quad5 (k * box.size.z, qA, { box.size.x, box.size.y });
-	Quad quad6 (-k * box.size.z, qA, { box.size.x, box.size.y });
+	Quad quad1 (i * size.x, qB, { size.x, size.y });
+	Quad quad2 (-i * size.x, qB, { size.x, size.y });
+	Quad quad3 (j * size.y, quaternion, { size.x, size.y });
+	Quad quad4 (-j * size.y, quaternion, { size.x, size.y });
+	Quad quad5 (k * size.z, qA, { size.x, size.y });
+	Quad quad6 (-k * size.z, qA, { size.x, size.y });
 
-	quad1.myDrawQuad(quad1, color); // right
-	quad2.myDrawQuad(quad2, color); // left
-	quad3.myDrawQuad(quad3, color); // up
-	quad4.myDrawQuad(quad4, color); // down
-	quad5.myDrawQuad(quad5, color); // front
-	quad6.myDrawQuad(quad6, color); // back
+	quad1.myDrawQuad(color);
+	quad2.myDrawQuad(color);
+	quad3.myDrawQuad(color);
+	quad4.myDrawQuad(color);
+	quad5.myDrawQuad(color);
+	quad6.myDrawQuad(color);
 
 	rlPopMatrix();
 }
 
 bool Box::Segment_Box(const Segment& segment, Vector3& interPt, Vector3& interNormal)
 {
-	Vector3 i = Vector3RotateByQuaternion({ 1, 0, 0 }, quaternion);
-	Vector3 j = Vector3RotateByQuaternion({ 0, 1, 0 }, quaternion);
-	Vector3 k = Vector3RotateByQuaternion({ 0, 0, 1 }, quaternion);
+	Vector3 i = Vector3RotateByQuaternion({ 1.0f, 0.0f, 0.0f }, quaternion);
+	Vector3 j = Vector3RotateByQuaternion({ 0.0f, 1.0f, 0.0f }, quaternion);
+	Vector3 k = Vector3RotateByQuaternion({ 0.0f, 0.0f, 1.0f }, quaternion);
 
-	Quaternion qA = QuaternionFromAxisAngle({ 1, 0, 0 }, PI / 2);
-	Quaternion qB = QuaternionFromAxisAngle({ 0, 0, 1 }, PI / 2);
+	Quad quad({ center + i * size.x }, QuaternionMultiply(quaternion, QuaternionFromAxisAngle({ 0.0f, 0.0f, 1.0f }, PI / 2.0f)), { size.y, size.z });
 
-	Quad quad;
-
-	quad.center = center + i * size.x;
-	quad.extension = { size.y, size.z };
-	quad.quaternion = QuaternionMultiply(quaternion, QuaternionFromAxisAngle({ 0.0f, 0.0f, 1.0f }, PI / 2.0f));
-	if (Segment_Quad(segment, quad, interPt, interNormal))
+	if (quad.Segment_Quad(segment, interPt, interNormal))
 		return true;
 
 	quad.center = center - i * size.x;
-	if (Segment_Quad(segment, quad, interPt, interNormal))
+	if (quad.Segment_Quad(segment, interPt, interNormal))
 		return true;
 
 	quad.center = center + j * size.y;
 	quad.extension = { size.x, size.z };
 	quad.quaternion = QuaternionMultiply(quaternion, QuaternionFromAxisAngle({ 0.0f, 1.0f, 0.0f }, PI));
-	if (Segment_Quad(segment, quad, interPt, interNormal))
+	if (quad.Segment_Quad(segment, interPt, interNormal))
 		return true;
 
 	quad.center = center - j * size.y;
-	if (Segment_Quad(segment, quad, interPt, interNormal))
+	if (quad.Segment_Quad(segment, interPt, interNormal))
 		return true;
 
 	quad.center = center + k * size.z;
 	quad.extension = { size.x, size.y };
 	quad.quaternion = QuaternionMultiply(quaternion, QuaternionFromAxisAngle({ 1.0f, 0.0f, 0.0f }, PI / 2.0f));
-	if (Segment_Quad(segment, quad, interPt, interNormal))
+	if (quad.Segment_Quad(segment, interPt, interNormal))
 		return true;
 
 	quad.center = center - k * size.z;
-	if (Segment_Quad(segment, quad, interPt, interNormal))
+	if (quad.Segment_Quad(segment, interPt, interNormal))
 		return true;
+
+	return false;
 }
 
-void Box::drawIntersection(const Segment& segment, const Box& box, Vector3& interPt, Vector3& interNormal, Color color)
+void Box::drawIntersection(const Segment& segment, Vector3& interPt, Vector3& interNormal, Color color)
 {
-	Vector3 normal = normalize(Vector3RotateByQuaternion({ 0.0f, 1.0f, 0.0f }, box.quaternion));
+	Vector3 normal = normalize(Vector3RotateByQuaternion({ 0.0f, 1.0f, 0.0f }, quaternion));
 
 	if (Segment_Box(segment, interPt, interNormal))
 	{
@@ -90,6 +86,6 @@ void Box::drawIntersection(const Segment& segment, const Box& box, Vector3& inte
 	}
 
 	DrawLine3D(segment.ptA, segment.ptB, color);
-	myDrawBox(box, color);
-	DrawLine3D(box.center, normal + box.center, PURPLE);
+	myDrawBox(color);
+	DrawLine3D(center, 2.0f * normal + center, PURPLE);
 }

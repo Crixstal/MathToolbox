@@ -21,16 +21,16 @@ Plane::Plane(const Vector3& vecA, const Vector3& vecB, const Vector3& vecC)
 	distance = dotProduct(vecA, normal);
 }
 
-void Plane::myDrawPlane(const Plane& plane, Color color)
+void Plane::myDrawPlane(Color color)
 {
 	rlPushMatrix();
 
-	Vector3 center = plane.normal * distance;
+	Vector3 center = normal * distance;
 	rlTranslatef(center.x, center.y, center.z);
 
 	Vector3 vect;
 	float angle;
-	QuaternionToAxisAngle(QuaternionFromVector3ToVector3({ 0.0f, 1.0f, 0.0f }, plane.normal), &vect, &angle);
+	QuaternionToAxisAngle(QuaternionFromVector3ToVector3({ 0.0f, 1.0f, 0.0f }, normal), &vect, &angle);
 
 	rlRotatef(angle * RAD2DEG, vect.x, vect.y, vect.z);
 	rlScalef(1.0f, 1.0f, 1.0f);
@@ -50,33 +50,33 @@ void Plane::myDrawPlane(const Plane& plane, Color color)
 	rlPopMatrix();
 }
 
-bool Plane::Segment_Plane(const Segment& segment, const Plane& plane, Vector3& interPt, Vector3& interNormal)
+bool Plane::Segment_Plane(const Segment& segment, Vector3& interPt, Vector3& interNormal)
 {
 	Vector3 AB = vecFromPt(segment.ptA, segment.ptB);
-	float dotAB_normal = dotProduct(AB, plane.normal);
+	float dotAB_normal = dotProduct(AB, normal);
 
 	if (fabsf(dotAB_normal) <= 1e-6)
 		return false;
 	
-	float T = (plane.distance - dotProduct(segment.ptA, plane.normal)) / dotAB_normal;
+	float T = (distance - dotProduct(segment.ptA, normal)) / dotAB_normal;
 
 	if (T <= 0 || T >= 1)
 		return false;
 
 	interPt = segment.ptA + AB * T;
-	interNormal = plane.normal;
+	interNormal = normal;
 
-	if (dotAB_normal <= 0)
+	if (dotAB_normal > 0)
 		interNormal = -interNormal;
 
 	return true;
 }
 
-void Plane::drawIntersection(const Segment& segment, const Plane& plane, Vector3& interPt, Vector3& interNormal, Color color)
+void Plane::drawIntersection(const Segment& segment, Vector3& interPt, Vector3& interNormal, Color color)
 {
-	Vector3 center = plane.normal * plane.distance;
+	Vector3 center = normal * distance;
 
-	if (Segment_Plane(segment, plane, interPt, interNormal))
+	if (Segment_Plane(segment, interPt, interNormal))
 	{
 		color = RED;
 		DrawSphere(interPt, 0.08f, BROWN);
@@ -84,6 +84,6 @@ void Plane::drawIntersection(const Segment& segment, const Plane& plane, Vector3
 	}
 
 	DrawLine3D(segment.ptA, segment.ptB, color);
-	myDrawPlane(plane, color);
-	DrawLine3D(center, plane.normal + center, PURPLE);
+	myDrawPlane(color);
+	DrawLine3D(center, normal + center, PURPLE);
 }

@@ -38,18 +38,18 @@ void Application::drawGrid()
 
 void Application::cameraControls()
 {
-    DrawRectangle(10, 10, 320, 110, Fade(SKYBLUE, 0.5f));
-    DrawRectangleLines(10, 10, 320, 110, BLUE);
+    DrawRectangle(10, 10, 250, 110, Fade(SKYBLUE, 0.5f));
+    DrawRectangleLines(10, 10, 250, 110, BLUE);
     DrawText("Free camera default controls:", 20, 20, 10, BLACK);
-    DrawText("- Mouse Wheel to Zoom in-out", 40, 40, 10, DARKGRAY);
-    DrawText("- Mouse Wheel Pressed to Pan", 40, 60, 10, DARKGRAY);
-    DrawText("- Alt + Mouse Wheel Pressed to Rotate", 40, 80, 10, DARKGRAY);
-    DrawText("- Z to reset target to (0, 0, 0)", 40, 100, 10, DARKGRAY);
+    DrawText("- Mouse Wheel to Zoom in-out", 40, 40, 10, BLACK);
+    DrawText("- Mouse Wheel Pressed to Pan", 40, 60, 10, BLACK);
+    DrawText("- Alt + Mouse Wheel Pressed to Rotate", 40, 80, 10, BLACK);
+    DrawText("- Z to reset target to (0, 0, 0) (QWERTY)", 40, 100, 10, BLACK);
 }
 
 void Application::changeMode()
 {
-    DrawText("Click right/left to change mode", 400, 30, 10, DARKGRAY);
+    DrawText("Click right/left to change mode", 400, 30, 10, BLACK);
 
     if (IsKeyPressed(KEY_RIGHT))
     {
@@ -64,7 +64,7 @@ void Application::changeMode()
         --stateChanger;
 
         if (stateChanger < 0)
-            stateChanger = 0;
+            stateChanger = 7;
     }
 
     if (IsKeyPressed(KEY_UP))
@@ -81,17 +81,17 @@ void Application::changeMode()
             DrawText("Plane", 450, 10, 20, BLACK);
             break;
 
-        case State::SPHERE:
-            DrawText("Sphere", 450, 10, 20, BLACK);
-            break;
-
         case State::QUAD:
             DrawText("Quad", 450, 10, 20, BLACK);
             break;
 
+        case State::SPHERE:
+            DrawText("Sphere", 450, 10, 20, BLACK);
+            break;
+
         case State::CYLINDER:
             DrawText("Cylinder", 450, 10, 20, BLACK);
-            DrawText("Click up/down to change cylinder", 400, 40, 10, DARKGRAY);
+            DrawText("Click up/down to change cylinder", 400, 40, 10, BLACK);
 
             if (isInfinite == true)
                 DrawText("(infinite)", 536, 10, 20, BLACK);
@@ -125,46 +125,50 @@ void Application::drawIntersection()
 {
     Vector3 interPt = {};
     Vector3 interNormal = {};
-    Segment segment = { {}, {2.f, 2.f, 1.f} };
+    Segment segment = { {-2.0f, -2.0f, -1.0f}, {2.0f, 2.0f, 1.0f} };
     Plane plane ({ 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f });
-    Sphere sphere ({}, 1.0f);
     Quad quad ({}, QuaternionIdentity(), { 1.0f, 2.0f });
+    Sphere sphere ({}, 1.0f);
     Cylinder cyl ({}, { 0.0f, 3.0f, 0.0f }, 1.0f, isInfinite);
-    Capsule capsule ({}, { 0.0f, 3.0f, 0.0f }, 1.0f);
+    Capsule caps ({}, { 0.0f, 3.0f, 0.0f }, 1.0f);
     Box box ({}, { 1.0f, 1.0f, 1.0f }, QuaternionIdentity());
    
     float time = GetTime();
-    Vector3 movement = { sinf(time), cosf(time), sinf(time) };
 
     switch (state)
     {
         case State::PLANE: 
-            plane.normal = normalize(movement);
-            plane.drawIntersection(segment, plane, interPt, interNormal);
-            break;
-
-        case State::SPHERE: 
-            sphere.center = movement;
-            sphere.drawIntersection(segment, sphere, 20, 20, interPt, interNormal);
+            plane.normal = normalize({ cosf(time),  2 * sinf(time), 1.0f});
+            plane.distance = 2 * cosf(time);
+            plane.drawIntersection(segment, interPt, interNormal);
             break;
 
         case State::QUAD:
-            quad.center = movement;
+            quad.center = { 2 * cosf(time), cosf(time), 2.5f * sinf(time) };
             quad.quaternion = QuaternionMultiply(quad.quaternion, QuaternionFromAxisAngle({ 0.0f, 0.0f, 1.0f }, PI * GetFrameTime() * 0.1f));
-            quad.drawIntersection(segment, quad, interPt, interNormal);
+            quad.drawIntersection(segment, interPt, interNormal);
+            break;
+
+        case State::SPHERE: 
+            sphere.center = { sinf(time), cosf(time), sinf(time) };
+            sphere.drawIntersection(segment, 20, 20, interPt, interNormal);
             break;
 
         case State::CYLINDER:
-            cyl.ptP = movement;
-            cyl.drawIntersection(segment, cyl, interPt, interNormal);
+            cyl.ptP = { 2 * sinf(GetTime()), -1.f, 2 * sinf(GetTime()) };
+            cyl.ptQ = { 2 * sinf(GetTime()) / 2, 2.f, cosf(GetTime()) };
+            cyl.drawIntersection(segment, interPt, interNormal);
             break;
 
         case State::CAPSULE:
+            caps.ptP = { 2 * sinf(GetTime()), -1.f, 2 * sinf(GetTime()) };
+            caps.ptQ = { 2 * sinf(GetTime()) / 2, 2.f, cosf(GetTime()) };
+            caps.drawIntersection(segment, interPt, interNormal);
             break;
 
         case State::BOX:
-            box.center = { sinf(time) * 2, cosf(time), sinf(time) };
-            box.drawIntersection(segment, box, interPt, interNormal);
+            box.center = { 2 * sinf(time), cosf(time), sinf(time) };
+            box.drawIntersection(segment, interPt, interNormal);
             break;
 
         case State::ROUND_BOX:

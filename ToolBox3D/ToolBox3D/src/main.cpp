@@ -19,7 +19,7 @@ int main()
         
         app.changeMode();
         
-        ClearBackground(RAYWHITE);
+        ClearBackground(DARKGRAY);
         
         BeginMode3D(camera);
         

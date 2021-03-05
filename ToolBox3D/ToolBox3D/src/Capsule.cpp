@@ -7,74 +7,35 @@ Capsule::Capsule(const Vector3& P, const Vector3& Q, const float& r)
     radius = r;
 }
 
-void Capsule::myDrawCapsule(const Capsule& caps, Color color)
+void Capsule::myDrawCapsule(const Color& color)
 {
-    Vector3 PQ = vecFromPt(caps.ptP, caps.ptQ);
-    float length = vectorMagnitude(PQ);
-    Vector3 center = (caps.ptP + caps.ptQ) / 2.0f;
+    Cylinder caps(ptP, ptQ, radius, true);
+    caps.myDrawCylinder(color);
 
-    rlPushMatrix();
-    rlTranslatef(center.x, center.y, center.z);
-
-    Vector3 vect;
-    float angle;
-    QuaternionToAxisAngle(QuaternionFromVector3ToVector3({ 0.0f, 1.0f, 0.0f }, normalize(PQ)), &vect, &angle);
-    rlRotatef(angle * RAD2DEG, vect.x, vect.y, vect.z);
-    rlScalef(caps.radius, length, caps.radius);
-
-    rlBegin(RL_TRIANGLES);
-    rlColor4ub(color.r, color.g, color.b, color.a);
-
-    unsigned int sides = 20;
-
-    for (int i = 0; i < 360; i += 360 / sides)
-    {
-        Vector3 calcul1 = { sinf(DEG2RAD * i) * caps.radius, -0.5f, cosf(DEG2RAD * i) * caps.radius };
-        Vector3 calcul2 = { sinf(DEG2RAD * (i + 360 / sides)) * caps.radius, 0.5f, cosf(DEG2RAD * (i + 360 / sides)) * caps.radius };
-        Vector3 calcul3 = { sinf(DEG2RAD * (i + 360 / sides)) * caps.radius, -0.5f, cosf(DEG2RAD * (i + 360 / sides)) * caps.radius };
-        Vector3 calcul4 = { sinf(DEG2RAD * i) * caps.radius, 0.5f, cosf(DEG2RAD * i) * caps.radius };
-
-        rlVertex3f(calcul1.x, calcul1.y, calcul1.z);
-        rlVertex3f(calcul3.x, calcul3.y, calcul3.z);
-        rlVertex3f(calcul2.x, calcul2.y, calcul2.z);
-
-        rlVertex3f(calcul4.x, calcul4.y, calcul4.z);
-        rlVertex3f(calcul1.x, calcul1.y, calcul1.z);
-        rlVertex3f(calcul2.x, calcul2.y, calcul2.z);
-
-        //Sphere::myDrawSphere(20, 20, 0, 0, PI, PI, color);
-        //Sphere::myDrawSphere(20, 20, 0, PI, 0, PI, color);
-    }
-
-    rlEnd();
-    rlPopMatrix();
+    Sphere sphere1(ptP, radius);
+    Sphere sphere2(ptQ, radius);
+    sphere1.myDrawSphere(20, 20, 0, 0, 2 * PI, PI, color);
+    sphere2.myDrawSphere(20, 20, 0, 0, 2 * PI, PI, color);
 }
-/*
-bool Capsule::Segment_Capsule(const Segment& segment, const Capsule& caps, Vector3& interPt, Vector3& interNormal)
+
+bool Capsule::Segment_Capsule(const Segment& segment, Vector3& interPt, Vector3& interNormal)
 {
-    if (!Cylinder::Segment_CylinderInfinite(segment, caps, interPt, interNormal))
+    Cylinder caps(ptP, ptQ, radius, false);
+    if (!caps.Segment_CylinderInfinite(segment, interPt, interNormal))
         interPt = segment.ptA;
 
-    Vector3 PQ = vecFromPt(caps.ptP, caps.ptQ);
-    Vector3 PM = vecFromPt(caps.ptP, interPt);
+    Vector3 PQ = vecFromPt(ptP, ptQ);
+    Vector3 PM = vecFromPt(ptP, interPt);
 
     if (dotProduct(PM, PQ) < 0 || dotProduct(PM, PQ) > dotProduct(PQ, PQ))
     {
-        Plane Pplane(normalize(-PQ), caps.ptP);
-        Plane Qplane(normalize(PQ), caps.ptQ);
+        Sphere caps1(ptP, radius);
+        Sphere caps2(ptQ, radius);
 
-        float lengthDiff = vectorMagnitude(caps.ptP - segment.ptA) - vectorMagnitude(caps.ptQ - segment.ptB);
+        if (caps1.Segment_Sphere(segment, interPt, interNormal))
+            return true;
 
-        if (lengthDiff > 0 && Plane::Segment_Plane(segment, Qplane, interPt, interNormal))
-        {
-            float len = vectorMagnitude(caps.ptQ - interPt);
-
-            if (vectorMagnitude(caps.ptQ - interPt) <= caps.radius * caps.radius)
-                return true;
-        }
-
-        else if (lengthDiff < 0 && Plane::Segment_Plane(segment, Pplane, interPt, interNormal))
-            if (vectorMagnitude(caps.ptP - interPt) <= caps.radius * caps.radius)
+        if (caps2.Segment_Sphere(segment, interPt, interNormal))
                 return true;
     }
 
@@ -84,32 +45,19 @@ bool Capsule::Segment_Capsule(const Segment& segment, const Capsule& caps, Vecto
     return false;
 }
 
-void Capsule::drawIntersection(const Segment& segment, const Capsule& caps, Vector3& interPt, Vector3& interNormal, Color color)
+void Capsule::drawIntersection(const Segment& segment, Vector3& interPt, Vector3& interNormal, Color color)
 {
-    Vector3 normal = normalize(vecFromPt(caps.ptP, caps.ptQ));
-    Vector3 center = (caps.ptP + caps.ptQ) / 2.0f;
+    Vector3 normal = normalize(vecFromPt(ptP, ptQ));
+    Vector3 center = (ptP + ptQ) / 2.0f;
 
-    if (isInfinite)
+    if (Segment_Capsule(segment, interPt, interNormal))
     {
-        if (Segment_CapsuleInfinite(segment, caps, interPt, interNormal))
-        {
-            color = RED;
-            DrawSphere(interPt, 0.08f, BROWN);
-            DrawLine3D(interPt, interNormal + interPt, PURPLE);
-        }
-    }
-
-    else
-    {
-        if (Segment_Capsule(segment, caps, interPt, interNormal))
-        {
-            color = RED;
-            DrawSphere(interPt, 0.08f, BROWN);
-            DrawLine3D(interPt, interNormal + interPt, PURPLE);
-        }
+        color = RED;
+        DrawSphere(interPt, 0.08f, BROWN);
+        DrawLine3D(interPt, interNormal + interPt, PURPLE);
     }
 
     DrawLine3D(segment.ptA, segment.ptB, color);
-    myDrawCapsule(caps, color);
+    myDrawCapsule(color);
     DrawLine3D(center, 3 * normal + center, PURPLE);
-}*/
+}

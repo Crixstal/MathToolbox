@@ -12,8 +12,8 @@ struct Capsule
 
     Capsule(const Vector3& P, const Vector3& Q, const float& r);
 
-    void myDrawCapsule(const Capsule& cyl, Color color = GREEN);
-    bool Segment_Capsule(const Segment& segment, const Capsule& cyl, Vector3& interPt, Vector3& interNormal);
-    void drawIntersection(const Segment& segment, const Capsule& cyl, Vector3& interPt, Vector3& interNormal, Color color = GREEN);
+    void myDrawCapsule(const Color& color = GREEN);
+    bool Segment_Capsule(const Segment& segment, Vector3& interPt, Vector3& interNormal);
+    void drawIntersection(const Segment& segment, Vector3& interPt, Vector3& interNormal, Color color = GREEN);
 };
 
