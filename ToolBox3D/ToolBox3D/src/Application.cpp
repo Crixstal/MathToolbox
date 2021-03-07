@@ -132,6 +132,7 @@ void Application::drawIntersection()
     Cylinder cyl ({}, { 0.0f, 3.0f, 0.0f }, 1.0f, isInfinite);
     Capsule caps ({}, { 0.0f, 3.0f, 0.0f }, 1.0f);
     Box box ({}, { 1.0f, 1.0f, 1.0f }, QuaternionIdentity());
+    Round_Box roundBox({}, { 1.0f, 1.0f, 1.0f }, QuaternionIdentity());
    
     float time = GetTime();
 
@@ -145,7 +146,6 @@ void Application::drawIntersection()
 
         case State::QUAD:
             quad.center = { 2 * cosf(time), cosf(time), 2.5f * sinf(time) };
-            quad.quaternion = QuaternionMultiply(quad.quaternion, QuaternionFromAxisAngle({ 0.0f, 0.0f, 1.0f }, PI * GetFrameTime() * 0.1f));
             quad.drawIntersection(segment, interPt, interNormal);
             break;
 
@@ -172,6 +172,8 @@ void Application::drawIntersection()
             break;
 
         case State::ROUND_BOX:
+            //roundBox.center = { 2 * cosf(time), cosf(time), 2.5f * sinf(time) };
+            roundBox.myDrawRoundBox();
             break;
 
         case State::BOUNCING_BALL:

@@ -162,6 +162,7 @@
     <ClInclude Include="include\Maths.h" />
     <ClInclude Include="include\Plane.h" />
     <ClInclude Include="include\Quad.h" />
+    <ClInclude Include="include\Round_Box.h" />
     <ClInclude Include="include\Sphere.h" />
   </ItemGroup>
   <ItemGroup>
@@ -172,6 +173,7 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Plane.cpp" />
     <ClCompile Include="src\Quad.cpp" />
+    <ClCompile Include="src\Round_Box.cpp" />
     <ClCompile Include="src\Sphere.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

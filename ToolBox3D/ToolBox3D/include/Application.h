@@ -8,6 +8,7 @@
 #include "Cylinder.h"
 #include "Capsule.h"
 #include "Box.h"
+#include "Round_Box.h"
 
 struct Application
 {
@@ -23,7 +24,7 @@ struct Application
 		BOUNCING_BALL
 	};
 
-	int stateChanger = 3;
+	int stateChanger = 6;
 	State state;
 	bool isInfinite = false;
 	
