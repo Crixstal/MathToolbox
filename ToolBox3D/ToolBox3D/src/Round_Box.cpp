@@ -7,37 +7,71 @@ Round_Box::Round_Box(const Vector3& c, const Vector3& s, const Quaternion& q)
     quaternion = q;
 }
 
-void Round_Box::myDrawRoundBox(Color color)
+void Round_Box::myDrawRoundBox(const Color& color)
 {
-    Capsule caps1({ center.x - 3.0f, center.y + 3.0f, center.z + 3.0f }, { center.x + 3.0f, center.y + 3.0f, center.z + 3.0f }, 1.0f);
-    Cylinder cyl1({ center.x + 3.0f, center.y + 3.0f, center.z + 3.0f }, { center.x + 3.0f, center.y - 3.0f, center.z + 3.0f }, 1.0f, true);
-    Cylinder cyl2({ center.x - 3.0f, center.y - 3.0f, center.z + 3.0f }, { center.x - 3.0f, center.y + 3.0f, center.z + 3.0f }, 1.0f, true);
-    Capsule caps2({ center.x + 3.0f, center.y - 3.0f, center.z + 3.0f }, { center.x - 3.0f, center.y - 3.0f, center.z + 3.0f }, 1.0f);
-    
-    Capsule caps3({ center.x - 3.0f, center.y + 3.0f, center.z - 3.0f }, { center.x + 3.0f, center.y + 3.0f, center.z - 3.0f }, 1.0f);
-    Cylinder cyl3({ center.x + 3.0f, center.y + 3.0f, center.z - 3.0f }, { center.x + 3.0f, center.y - 3.0f, center.z - 3.0f }, 1.0f, true);
-    Cylinder cyl4({ center.x - 3.0f, center.y - 3.0f, center.z - 3.0f }, { center.x - 3.0f, center.y + 3.0f, center.z - 3.0f }, 1.0f, true);
-    Capsule caps4({ center.x + 3.0f, center.y - 3.0f, center.z - 3.0f }, { center.x - 3.0f, center.y - 3.0f, center.z - 3.0f }, 1.0f);
+#pragma region SPHERE
+    Sphere sphere1({ center.x - 1.0f, center.y + 1.0f, center.z + 1.0f }, 0.5f); // front up left
+    Sphere sphere2({ center.x + 1.0f, center.y + 1.0f, center.z + 1.0f }, 0.5f); // front up right
+    Sphere sphere3({ center.x + 1.0f, center.y - 1.0f, center.z + 1.0f }, 0.5f); // front down right
+    Sphere sphere4({ center.x - 1.0f, center.y - 1.0f, center.z + 1.0f }, 0.5f); // front down left
 
-    Cylinder cyl5({ center.x - 3.0f, center.y + 3.0f, center.z + 3.0f }, { center.x - 3.0f, center.y + 3.0f, center.z - 3.0f }, 1.0f, true);
-    Cylinder cyl6({ center.x + 3.0f, center.y + 3.0f, center.z + 3.0f }, { center.x + 3.0f, center.y + 3.0f, center.z - 3.0f }, 1.0f, true);
-    Cylinder cyl7({ center.x + 3.0f, center.y - 3.0f, center.z + 3.0f }, { center.x + 3.0f, center.y - 3.0f, center.z - 3.0f }, 1.0f, true);
-    Cylinder cyl8({ center.x - 3.0f, center.y - 3.0f, center.z + 3.0f }, { center.x - 3.0f, center.y - 3.0f, center.z - 3.0f }, 1.0f, true);
+    Sphere sphere5({ center.x + 1.0f, center.y + 1.0f, center.z - 1.0f }, 0.5f); // back up right
+    Sphere sphere6({ center.x - 1.0f, center.y + 1.0f, center.z - 1.0f }, 0.5f); // back up left
+    Sphere sphere7({ center.x + 1.0f, center.y - 1.0f, center.z - 1.0f }, 0.5f); // back down right
+    Sphere sphere8({ center.x - 1.0f, center.y - 1.0f, center.z - 1.0f }, 0.5f); // back down left
 
-    //front face
-    caps1.myDrawCapsule(color); // up
-    cyl1.myDrawCylinder(color); // right
-    cyl2.myDrawCylinder(color); // left
-    caps2.myDrawCapsule(color); // down
-    
-    //back face
-    caps3.myDrawCapsule(color); // up
-    cyl3.myDrawCylinder(color); // right
-    cyl4.myDrawCylinder(color); // left
-    caps4.myDrawCapsule(color); // down
+    sphere1.myDrawSphere(20, 20, PI / 2, 0, PI, PI / 2, color); // startLong, startLat, endLong, endLat
+    sphere2.myDrawSphere(20, 20, 0, 0, PI / 2, PI / 2, color);
+    sphere3.myDrawSphere(20, 20, 0, PI / 2, PI / 2, PI, color);
+    sphere4.myDrawSphere(20, 20, PI / 2, PI, PI, PI / 2, color);
 
-    cyl5.myDrawCylinder(color);
-    cyl6.myDrawCylinder(color);
-    cyl7.myDrawCylinder(color);
-    cyl8.myDrawCylinder(color);
+    sphere5.myDrawSphere(20, 20, 3 * PI / 2, 0, 2 * PI, PI / 2, color);
+    sphere6.myDrawSphere(20, 20, 0, 3 * PI / 2, PI / 2, 2 * PI, color);
+    sphere7.myDrawSphere(20, 20, 3 * PI / 2, PI / 2, 2 * PI, PI, color);
+    sphere8.myDrawSphere(20, 20, PI, PI / 2, 3 * PI / 2, PI, color);
+#pragma endregion
+
+#pragma region CYLINDER
+    float r = 0.25/2; //radius cylinder / 2;
+
+    Cylinder cyl1(sphere2.center, sphere1.center, 0.5f, true); // front up
+    Cylinder cyl2(sphere4.center, sphere3.center, 0.5f, true); // front down
+    Cylinder cyl3(sphere3.center, sphere2.center, 0.5f, true); // front right
+    Cylinder cyl4(sphere4.center, sphere1.center, 0.5f, true); // front left
+
+    Cylinder cyl5({ -1 + r,1.5f,0 }, { 1 - r,1.5f,0 }, 0.5f, true);
+    Cylinder cyl6({ 1,1.5f,0 + r }, { 1,1.5f,2 - r }, 0.5f, true);
+    Cylinder cyl7({ 1 - r,1.5f,2 }, { -1 + r,1.5f,2 }, 0.5f, true);
+    Cylinder cyl8({ -1,1.5f,2 - r }, { -1,1.5f,0 + r }, 0.5f, true);
+
+    cyl1.myDrawCylinder(color, 20, 0, PI / 2);
+    cyl2.myDrawCylinder(color, 20, 0, PI / 2);
+    cyl3.myDrawCylinder(color, 20, 0, PI / 2);
+    cyl4.myDrawCylinder(color, 20, 3 * PI / 2, 2 * PI);
+    //cyl5.myDrawCylinder(color, 20);
+    //cyl6.myDrawCylinder(color, 20);
+    //cyl7.myDrawCylinder(color, 20);
+    //cyl8.myDrawCylinder(color, 20);
+#pragma endregion
+}
+
+bool Round_Box::Segment_RoundBox(const Segment& segment, Vector3& interPt, Vector3& interNormal)
+{
+    return true;
+}
+
+void Round_Box::drawIntersection(const Segment& segment, Vector3& interPt, Vector3& interNormal, Color color)
+{
+    Vector3 normal = normalize(Vector3RotateByQuaternion({ 0.0f, 1.0f, 0.0f }, quaternion));
+
+    /*if (Segment_RoundBox(segment, interPt, interNormal))
+    {
+        color = RED;
+        DrawSphere(interPt, 0.08f, BROWN);
+        DrawLine3D(interPt, interNormal + interPt, PURPLE);
+    }*/
+
+    DrawLine3D(segment.ptA, segment.ptB, color);
+    myDrawRoundBox(color);
+    DrawLine3D(center, 2.0f * normal + center, PURPLE);
 }

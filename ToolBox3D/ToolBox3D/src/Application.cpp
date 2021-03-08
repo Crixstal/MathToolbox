@@ -173,7 +173,7 @@ void Application::drawIntersection()
 
         case State::ROUND_BOX:
             //roundBox.center = { 2 * cosf(time), cosf(time), 2.5f * sinf(time) };
-            roundBox.myDrawRoundBox();
+            roundBox.drawIntersection(segment, interPt, interNormal);
             break;
 
         case State::BOUNCING_BALL:

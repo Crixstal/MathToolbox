@@ -8,8 +8,10 @@ Cylinder::Cylinder(const Vector3& P, const Vector3& Q, const float& r, const boo
     isInfinite = infinite;
 }
 
-void Cylinder::myDrawCylinder(Color color)
+void Cylinder::myDrawCylinder(const Color& color, const int& resLat, const float& startLat, const float& endLat)
 {
+    float stepLat = (endLat - startLat) / (float)resLat;
+
     Vector3 PQ = vecFromPt(ptP, ptQ);
     float length = vectorMagnitude(PQ);
     Vector3 center = (ptP + ptQ) / 2.0f;
@@ -26,32 +28,33 @@ void Cylinder::myDrawCylinder(Color color)
     rlBegin(RL_TRIANGLES);
     rlColor4ub(color.r, color.g, color.b, color.a);
 
-    unsigned int sides = 20;
-
-    for (int i = 0; i < 360; i += 360 / sides)
+    for (int i = 0; i < resLat; ++i)
     {
-        Vector3 calcul1 = { sinf(DEG2RAD * i) * radius, -0.5f, cosf(DEG2RAD * i) * radius };
-        Vector3 calcul2 = { sinf(DEG2RAD * (i + 360 / sides)) * radius, 0.5f, cosf(DEG2RAD * (i + 360 / sides)) * radius };
-        Vector3 calcul3 = { sinf(DEG2RAD * (i + 360 / sides)) * radius, -0.5f, cosf(DEG2RAD * (i + 360 / sides))* radius };
-        Vector3 calcul4 = { sinf(DEG2RAD * i) * radius, 0.5f, cosf(DEG2RAD * i) * radius };
+        float theta0 = i * stepLat + startLat;
+        float theta1 = (i + 1 == resLat) ? endLat : (i + 1) * stepLat + startLat;
+
+        Vector3 calcul1 = { sinf(theta0), -0.5f, cosf(theta0) };
+        Vector3 calcul2 = { sinf(theta0), 0.5f, cosf(theta0) };
+        Vector3 calcul3 = { sinf(theta1), -0.5f, cosf(theta1) };
+        Vector3 calcul4 = { sinf(theta1), 0.5f, cosf(theta1) };
 
         rlVertex3f(calcul1.x, calcul1.y, calcul1.z);
         rlVertex3f(calcul3.x, calcul3.y, calcul3.z);
         rlVertex3f(calcul2.x, calcul2.y, calcul2.z);
 
+        rlVertex3f(calcul3.x, calcul3.y, calcul3.z);
         rlVertex3f(calcul4.x, calcul4.y, calcul4.z);
-        rlVertex3f(calcul1.x, calcul1.y, calcul1.z);
         rlVertex3f(calcul2.x, calcul2.y, calcul2.z);
 
         if (!isInfinite)
         {
             rlVertex3f(0.0f, -0.5f, 0.0f);
-            rlVertex3f(calcul1.x, calcul1.y, calcul1.z);
             rlVertex3f(calcul3.x, calcul3.y, calcul3.z);
+            rlVertex3f(calcul1.x, calcul1.y, calcul1.z);
 
             rlVertex3f(0.0f, 0.5f, 0.0f);
-            rlVertex3f(calcul4.x, calcul4.y, calcul4.z);
             rlVertex3f(calcul2.x, calcul2.y, calcul2.z);
+            rlVertex3f(calcul4.x, calcul4.y, calcul4.z);
         }
     }
 

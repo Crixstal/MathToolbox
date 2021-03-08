@@ -21,7 +21,7 @@ Plane::Plane(const Vector3& vecA, const Vector3& vecB, const Vector3& vecC)
 	distance = dotProduct(vecA, normal);
 }
 
-void Plane::myDrawPlane(Color color)
+void Plane::myDrawPlane(const Color& color)
 {
 	rlPushMatrix();
 

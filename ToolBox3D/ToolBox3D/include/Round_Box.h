@@ -2,8 +2,7 @@
 
 #include "Maths.h"
 #include "Sphere.h"
-#include "Box.h"
-#include "Capsule.h"
+#include "Cylinder.h"
 
 struct Round_Box
 {
@@ -13,6 +12,8 @@ struct Round_Box
 
 	Round_Box(const Vector3& c, const Vector3& s, const Quaternion& q);
 
-	void myDrawRoundBox(Color color = GREEN);
+	void myDrawRoundBox(const Color& color = GREEN);	
+	bool Segment_RoundBox(const Segment& segment, Vector3& interPt, Vector3& interNormal);
+	void drawIntersection(const Segment& segment, Vector3& interPt, Vector3& interNormal, Color color = GREEN);
 };
 

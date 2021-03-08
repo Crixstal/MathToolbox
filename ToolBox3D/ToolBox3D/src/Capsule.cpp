@@ -10,7 +10,7 @@ Capsule::Capsule(const Vector3& P, const Vector3& Q, const float& r)
 void Capsule::myDrawCapsule(const Color& color)
 {
     Cylinder caps(ptP, ptQ, radius, true);
-    caps.myDrawCylinder(color);
+    caps.myDrawCylinder(color, 20, 0, 2 * PI);
 
     Sphere sphere1(ptP, radius);
     Sphere sphere2(ptQ, radius);

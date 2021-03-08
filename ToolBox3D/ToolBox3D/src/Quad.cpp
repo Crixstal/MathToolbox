@@ -8,7 +8,7 @@ Quad::Quad(const Vector3& c, const Quaternion& q, const Vector2& e)
     extension = e;
 }
 
-void Quad::myDrawQuad(Color color)
+void Quad::myDrawQuad(const Color& color)
 {
     rlPushMatrix();
     rlTranslatef(center.x, center.y, center.z);

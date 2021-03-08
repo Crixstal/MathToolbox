@@ -24,7 +24,7 @@ struct Application
 		BOUNCING_BALL
 	};
 
-	int stateChanger = 6;
+	int stateChanger = 0;
 	State state;
 	bool isInfinite = false;
 	

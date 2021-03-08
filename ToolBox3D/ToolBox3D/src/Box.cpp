@@ -7,7 +7,7 @@ Box::Box(const Vector3& c, const Vector3& s, const Quaternion& q)
 	quaternion = q;
 }
 
-void Box::myDrawBox(Color color)
+void Box::myDrawBox(const Color& color)
 {
 	Vector3 i = Vector3RotateByQuaternion({1, 0, 0}, quaternion);
 	Vector3 j = Vector3RotateByQuaternion({0, 1, 0}, quaternion);

@@ -15,7 +15,7 @@ Vector3 Sphere::getSphericalCoords(const float& theta, const float& phi)
     return { x, y, z };
 }
 
-void Sphere::myDrawSphere(const int& resLong, const int& resLat, const float& startLong, const float& startLat, const float& endLong, const float& endLat, Color color)
+void Sphere::myDrawSphere(const int& resLong, const int& resLat, const float& startLong, const float& startLat, const float& endLong, const float& endLat, const Color& color)
 {
     float stepLat = (endLat - startLat) / (float)resLat;
     float stepLong = (endLong - startLong) / (float)resLong;
@@ -30,12 +30,12 @@ void Sphere::myDrawSphere(const int& resLong, const int& resLat, const float& st
 
     for (int j = 0; j < resLat; ++j)
     {
-        float theta0 = j * stepLat;
+        float theta0 = j * stepLat + startLat;
         float theta1 = (j + 1 == resLat) ? endLat : (j + 1) * stepLat + startLat;
 
         for (int i = 0; i < resLong; ++i)
         {
-            float phi0 = i * stepLong;
+            float phi0 = i * stepLong + startLong;
             float phi1 = (i + 1 == resLong) ? endLong : (i + 1) * stepLong + startLong;
 
             Vector3 c0 = getSphericalCoords(theta1, phi1);
