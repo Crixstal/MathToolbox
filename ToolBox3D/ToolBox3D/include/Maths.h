@@ -111,3 +111,12 @@ inline Vector3 operator-(const Vector3& vecA)
 		-vecA.z
 	};
 };
+
+inline Vector3 operator+=(Vector3& vecA, const Vector3& vecB)
+{
+	return {
+		vecA.x += vecB.x,
+		vecA.y += vecB.y,
+		vecA.z += vecB.z
+	};
+};
