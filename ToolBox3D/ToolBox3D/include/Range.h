@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Box.h"
+#include "Maths.h"
 
 struct Range
 {
@@ -15,5 +16,7 @@ struct Range
 
 	bool rangeOverlap(const Range& rng1, const Range& rng2);
 
-	//Range boxOnAxisRng(const Box& box, const Vector3& vect);
+	Range ptOnAxisRng(const Vector3& pt, const Vector3& axis);
+	Range segOnAxisRng(const Segment& seg, const Vector3& axis);
+	Range boxOnAxisRng(const Box& box, const Vector3& axis);
 };

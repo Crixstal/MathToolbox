@@ -10,9 +10,12 @@ struct Referential
     Vector3 k;
     float angle;
 
+    Referential(const Vector3& center, const Quaternion& quat);
+
     void locToGlobPos(const Referential& local, Vector3& pt);
     void globToLocPos(const Referential& local, Vector3& pt);
 
     void locToGlobVect(const Referential& local, Vector3& vect);
     void globToLocVect(const Referential& local, Vector3& vect);
+
 };

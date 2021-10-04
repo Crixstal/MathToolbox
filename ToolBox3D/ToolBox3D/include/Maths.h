@@ -24,10 +24,12 @@ inline float vectorMagnitude(const Vector3& vec)
 
 inline Vector3 normalize(const Vector3& vec)
 {
+	float vecMag = vectorMagnitude(vec);
+
 	return {
-		vec.x / vectorMagnitude(vec),
-		vec.y / vectorMagnitude(vec),
-		vec.z / vectorMagnitude(vec)
+		vec.x / vecMag,
+		vec.y / vecMag,
+		vec.z / vecMag
 	};
 }
 
@@ -70,9 +72,9 @@ inline Vector3 operator*(const float& k, const Vector3& vec)
 inline Vector3 operator*(const Vector3& vecA, const Vector3& vecB)
 {
 	return {
-	vecB.x * vecA.x,
-	vecB.y * vecA.y,
-	vecB.z * vecA.z
+		vecB.x * vecA.x,
+		vecB.y * vecA.y,
+		vecB.z * vecA.z
 	};
 }
 

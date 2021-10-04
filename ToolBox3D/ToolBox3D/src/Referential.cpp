@@ -1,17 +1,23 @@
 #include "Referential.h"
 
+Referential::Referential(const Vector3& center, const Quaternion& quat)
+{
+    origin = center;
+    i = Vector3RotateByQuaternion({ 1.f, 0.f, 0.f }, quat);
+    j = Vector3RotateByQuaternion({ 0.f, 1.f, 0.f }, quat);
+    k = Vector3RotateByQuaternion({ 0.f, 0.f, 1.f }, quat);
+    
+    angle = quat.w;
+}
+
 void Referential::locToGlobPos(const Referential& local, Vector3& pt)
 {
-    Vector3 locOrigin = { local.origin.x, local.origin.y };
-    Vector3 OP = locOrigin + (local.i * pt.x);
-    OP += (local.j * pt.y);
-    pt.x = OP.x;
-    pt.y = OP.y;
+    pt = local.origin + (local.i * pt.x) + (local.j * pt.y) + (local.k * pt.z);
 }
 
 void Referential::globToLocPos(const Referential& local, Vector3& pt)
 {
-    Vector3 OP = { pt.x - local.origin.x, pt.y - local.origin.y, pt.z - local.origin.z };
+    Vector3 OP = pt - local.origin;
     pt.x = dotProduct(OP, local.i);
     pt.y = dotProduct(OP, local.j);
     pt.z = dotProduct(OP, local.k);
@@ -20,16 +26,16 @@ void Referential::globToLocPos(const Referential& local, Vector3& pt)
 void Referential::locToGlobVect(const Referential& local, Vector3& vect)
 {
     Vector3 OP = (local.i * vect.x) + (local.j * vect.y) + (local.k * vect.z);
-    vect.x = OP.x;
-    vect.y = OP.y;
-    vect.z = OP.z;
+    vect = OP;
 }
 
 void Referential::globToLocVect(const Referential& local, Vector3& vect)
 {
     Vector3 tmpVect = vect;
 
-    vect.x = dotProduct(tmpVect, local.i);
-    vect.y = dotProduct(tmpVect, local.j);
-    vect.z = dotProduct(tmpVect, local.k);
+    vect = {
+        dotProduct(tmpVect, local.i),
+        dotProduct(tmpVect, local.j),
+        dotProduct(tmpVect, local.k)
+    };
 }

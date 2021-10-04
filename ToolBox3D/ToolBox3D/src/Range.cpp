@@ -44,69 +44,78 @@ bool Range::rangeOverlap(const Range& rng1, const Range& rng2)
     return true;
 }
 
-/*Range Range::boxOnAxisRng(const Box& box, const Vector3& vect)
+Range Range::ptOnAxisRng(const Vector3& pt, const Vector3& axis)
+{
+    float projection = dotProduct(pt, axis);
+
+    Range rng = { projection, projection };
+
+    return rng;
+}
+
+Range Range::segOnAxisRng(const Segment& seg, const Vector3& axis)
+{
+    float projectionA = dotProduct(seg.ptA, axis);
+    float projectionB = dotProduct(seg.ptB, axis);
+
+    Range rng = { getMin(projectionA, projectionB), getMax(projectionA, projectionB) };
+
+    return rng;
+}
+
+Range Range::boxOnAxisRng(const Box& box, const Vector3& axis)
 {
 #pragma region VECTOR
-    Vector3 pt1 = { box.center.x + box.size.x, box.center.y + box.size.y,  box.center.z + box.size.z }; // top right back
+    Vector3 pt1 = { box.center.x + box.size.x, box.center.y + box.size.y, box.center.z + box.size.z }; // top right back
     Vector3 pt2 = { box.center.x - box.size.x, box.center.y + box.size.y, box.center.z + box.size.z }; // top left back
     Vector3 pt3 = { box.center.x - box.size.x, box.center.y + box.size.y, box.center.z - box.size.z }; // top left front
     Vector3 pt4 = { box.center.x + box.size.x, box.center.y + box.size.y, box.center.z - box.size.z }; // top right front
 
-    Vector3 pt5 = { box.center.x + box.size.x, box.center.y - box.size.y,  box.center.z + box.size.z }; // down right back
+    Vector3 pt5 = { box.center.x + box.size.x, box.center.y - box.size.y, box.center.z + box.size.z }; // down right back
     Vector3 pt6 = { box.center.x - box.size.x, box.center.y - box.size.y, box.center.z + box.size.z }; // down left back
     Vector3 pt7 = { box.center.x - box.size.x, box.center.y - box.size.y, box.center.z - box.size.z }; // down left front
     Vector3 pt8 = { box.center.x + box.size.x, box.center.y - box.size.y, box.center.z - box.size.z }; // down right front
 #pragma endregion
 
 #pragma region NUM
-    float num = dotProduct(vect, vect);
+    float num = dotProduct(axis, axis);
 
-    float num1 = dotProduct(pt1, vect);
-    float num2 = dotProduct(pt2, vect);
-    float num3 = dotProduct(pt3, vect);
-    float num4 = dotProduct(pt4, vect);
+    float num1 = dotProduct(pt1, axis);
+    float num2 = dotProduct(pt2, axis);
+    float num3 = dotProduct(pt3, axis);
+    float num4 = dotProduct(pt4, axis);
 
-    float num5 = dotProduct(pt5, vect);
-    float num6 = dotProduct(pt6, vect);
-    float num7 = dotProduct(pt7, vect);
-    float num8 = dotProduct(pt8, vect);
+    float num5 = dotProduct(pt5, axis);
+    float num6 = dotProduct(pt6, axis);
+    float num7 = dotProduct(pt7, axis);
+    float num8 = dotProduct(pt8, axis);
 #pragma endregion
 
 #pragma region MIN
-    float min1 = getMin(num, num1);
-    float min2 = getMin(num1, num2);
-    float min3 = getMin(num2, num3);
-    float min4 = getMin(num3, num4);
+    float min = getMin(num, num1);
+    min = getMin(min, num2);
+    min = getMin(min, num3);
+    min = getMin(min, num4);
 
-    float min5 = getMin(num4, num5);
-    float min6 = getMin(num5, num6);
-    float min7 = getMin(num6, num7);
-    float min8 = getMin(num7, num8);
-    float min8 = getMin(num8, num);
-
-    //float minR = getMin(min, min1);
-    //float minR = getMin(min1, min8); ?
-
+    min = getMin(min, num5);
+    min = getMin(min, num6);
+    min = getMin(min, num7);
+    min = getMin(min, num8);
 #pragma endregion
 
 #pragma region MAX
-    float min1 = getMax(num, num1);
-    float min2 = getMax(num1, num2);
-    float min3 = getMax(num2, num3);
-    float min4 = getMax(num3, num4);
+    float max = getMax(num, num1);
+    max = getMax(max, num2);
+    max = getMax(max, num3);
+    max = getMax(max, num4);
 
-    float min5 = getMax(num4, num5);
-    float min6 = getMax(num5, num6);
-    float min7 = getMax(num6, num7);
-    float min8 = getMax(num7, num8);
-    float min8 = getMax(num8, num);
-
-    //float maxR = getMax(min, min1);
-    //float maxR = getMax(min1, min8); ?
-
+    max = getMax(max, num5);
+    max = getMax(max, num6);
+    max = getMax(max, num7);
+    max = getMax(max, num8);
 #pragma endregion
 
-    Range rng = { minR, maxR };
+    Range rng = { min, max };
 
     return rng;
-}*/
+}

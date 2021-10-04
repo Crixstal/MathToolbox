@@ -36,39 +36,103 @@ void Box::myDrawBox(const Color& color)
 	rlPopMatrix();
 }
 
+bool Box::isPointInsideBox(const Vector3& point, const Box& box)
+{
+	Referential ref (box.center, box.quaternion);
+
+	// Find box referential
+	Vector3 centerPoint = point - box.center;
+
+	// Compute dot products between box's center-point vector and box's unit vector
+	centerPoint = { dotProduct(centerPoint, ref.i), dotProduct(centerPoint, ref.j), dotProduct(centerPoint, ref.k) };
+	// Compare dot with box extensions, since dot products are point projection on xyz plane according to box referential
+	return ((centerPoint.x <= box.size.x && centerPoint.x >= -box.size.x)
+		&& (centerPoint.y <= box.size.y && centerPoint.y >= -box.size.y)
+		&& (centerPoint.z <= box.size.z && centerPoint.z >= -box.size.z));
+}
+
+Quad Box::getRight() const
+{
+	Quaternion qdQuaternion = QuaternionMultiply(quaternion, QuaternionFromAxisAngle({ 0.f, 0.f, 1.f }, -PI / 2));
+	Vector3 qdCenter = Vector3RotateByQuaternion((1.f, 0.f, 0.f) * size, quaternion) + center;
+
+	return { qdCenter, qdQuaternion, {size.x, size.z} };
+}
+
+Quad Box::getLeft() const
+{
+	Quaternion qdQuaternion = QuaternionMultiply(quaternion, QuaternionFromAxisAngle({ 0.f, 0.f, 1.f }, PI / 2));
+	Vector3 qdCenter = Vector3RotateByQuaternion((-1.f, 0.f, 0.f) * size, quaternion) + center;
+
+	return { qdCenter, qdQuaternion, {size.x, size.z} };
+}
+
+Quad Box::getFront() const
+{
+	Quaternion qdQuaternion = QuaternionMultiply(quaternion, QuaternionFromAxisAngle({ 1.f, 0.f, 0.f }, PI / 2));
+	Vector3 qdCenter = Vector3RotateByQuaternion((0.f, 0.f, 1.f) * size, quaternion) + center;
+
+	return { qdCenter, qdQuaternion, {size.x, size.z} };
+}
+
+Quad Box::getBack() const
+{
+	Quaternion qdQuaternion = QuaternionMultiply(quaternion, QuaternionFromAxisAngle({ 1.f, 0.f, 0.f }, -PI / 2));
+	Vector3 qdCenter = Vector3RotateByQuaternion((0.f, 0.f, -1.f) * size, quaternion) + center;
+
+	return { qdCenter, qdQuaternion, {size.x, size.z} };
+}
+
+Quad Box::getUp() const
+{
+	Quaternion qdQuaternion = QuaternionMultiply(quaternion, QuaternionFromAxisAngle({ 1.f, 0.f, 0.f }, 0.f));
+	Vector3 qdCenter = Vector3RotateByQuaternion((0.f, 1.f, 0.f) * size, quaternion) + center;
+
+	return { qdCenter, qdQuaternion, {size.x, size.z} };
+}
+
+Quad Box::getBottom() const
+{
+	Quaternion qdQuaternion = QuaternionMultiply(quaternion, QuaternionFromAxisAngle({ 1.f, 0.f, 0.f }, PI));
+	Vector3 qdCenter = Vector3RotateByQuaternion((0.f, -1.f, 0.f) * size, quaternion) + center;
+
+	return { qdCenter, qdQuaternion, {size.x, size.z} };
+}
+
 bool Box::Segment_Box(const Segment& segment, Vector3& interPt, Vector3& interNormal)
 {
-	Vector3 i = Vector3RotateByQuaternion({ 1.0f, 0.0f, 0.0f }, quaternion);
-	Vector3 j = Vector3RotateByQuaternion({ 0.0f, 1.0f, 0.0f }, quaternion);
-	Vector3 k = Vector3RotateByQuaternion({ 0.0f, 0.0f, 1.0f }, quaternion);
+	if (isPointInsideBox(segment.ptA, *this)) 
+		return false;
 
-	Quad quad({ center + i * size.x }, QuaternionMultiply(quaternion, QuaternionFromAxisAngle({ 0.0f, 0.0f, 1.0f }, PI / 2.0f)), { size.y, size.z });
+	Referential boxRef (center, quaternion);
+	Vector3 AB = vecFromPt(segment.ptA, segment.ptB);
+	Quad face;
 
-	if (quad.Segment_Quad(segment, interPt, interNormal))
+	//////////// RIGHT && LEFT FACE
+	if (dotProduct(AB, boxRef.i) < 0)
+		face = getRight();
+	else
+		face = getLeft();
+
+	if (face.Segment_Quad(segment, interPt, interNormal))
 		return true;
 
-	quad.center = center - i * size.x;
-	if (quad.Segment_Quad(segment, interPt, interNormal))
+	//////////// UP && BOTTOM FACE
+	if (dotProduct(AB, boxRef.j) < 0)
+		face = getUp();
+	else
+		face = getBottom();
+
+	if (face.Segment_Quad(segment, interPt, interNormal))
 		return true;
 
-	quad.center = center + j * size.y;
-	quad.extension = { size.x, size.z };
-	quad.quaternion = QuaternionMultiply(quaternion, QuaternionFromAxisAngle({ 0.0f, 1.0f, 0.0f }, PI));
-	if (quad.Segment_Quad(segment, interPt, interNormal))
-		return true;
+	//////////// FRONT && BACK FACE
+	if (dotProduct(AB, boxRef.k) < 0)
+		face = getFront();
+	else
+		face = getBack();
 
-	quad.center = center - j * size.y;
-	if (quad.Segment_Quad(segment, interPt, interNormal))
-		return true;
-
-	quad.center = center + k * size.z;
-	quad.extension = { size.x, size.y };
-	quad.quaternion = QuaternionMultiply(quaternion, QuaternionFromAxisAngle({ 1.0f, 0.0f, 0.0f }, PI / 2.0f));
-	if (quad.Segment_Quad(segment, interPt, interNormal))
-		return true;
-
-	quad.center = center - k * size.z;
-	if (quad.Segment_Quad(segment, interPt, interNormal))
+	if (face.Segment_Quad(segment, interPt, interNormal))
 		return true;
 
 	return false;

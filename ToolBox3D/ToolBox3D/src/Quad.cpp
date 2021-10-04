@@ -35,6 +35,17 @@ void Quad::myDrawQuad(const Color& color)
     rlPopMatrix();
 }
 
+bool Quad::isInQuad(const Vector3& point)
+{
+    // Test in local referentiel to simplify calcul by only compare quad extension with point coordinates
+    Referential localRef (center, quaternion);
+
+    Vector3 localPoint = point;
+    localRef.globToLocPos(localRef, localPoint);
+
+    return (fabsf(localPoint.x) <= extension.x / 2) && (fabsf(localPoint.z) <= extension.y / 2);
+}
+
 bool Quad::Segment_Quad(const Segment& segment, Vector3& interPt, Vector3& interNormal)
 {
     Vector3 normal = normalize(Vector3RotateByQuaternion({ 0.0f, 1.0f, 0.0f }, quaternion));
@@ -44,7 +55,9 @@ bool Quad::Segment_Quad(const Segment& segment, Vector3& interPt, Vector3& inter
     if (!plane.Segment_Plane(segment, interPt, interNormal))
         return false;
 
-    Vector3 i = Vector3RotateByQuaternion({ 1.0f, 1.0f, 0.0f }, quaternion);
+    return isInQuad(interPt);
+
+    /*Vector3 i = Vector3RotateByQuaternion({1.0f, 1.0f, 0.0f}, quaternion);
     Vector3 j = Vector3RotateByQuaternion({ 0.0f, 0.0f, 1.0f }, quaternion);
     Vector3 vect = interPt - center;
 
@@ -52,7 +65,7 @@ bool Quad::Segment_Quad(const Segment& segment, Vector3& interPt, Vector3& inter
         fabsf(dotProduct(j, vect)) > extension.y)
         return false;
 
-    return true;
+    return true;*/
 }
 
 void Quad::drawIntersection(const Segment& segment, Vector3& interPt, Vector3& interNormal, Color color)
