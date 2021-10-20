@@ -35,4 +35,5 @@ struct Application
 
 	void changeMode();
 	void drawIntersection();
+	void move(Vector3& toMove, Quaternion& quaternion);
 };

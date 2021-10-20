@@ -126,13 +126,13 @@ void Application::drawIntersection()
     Vector3 interPt = {};
     Vector3 interNormal = {};
     Segment segment = { {-2.0f, -2.0f, -1.0f}, {2.0f, 2.0f, 1.0f} };
-    Plane plane ({ 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f });
-    Quad quad ({}, QuaternionIdentity(), { 1.0f, 2.0f });
-    Sphere sphere ({}, 1.0f);
-    Cylinder cyl ({}, { 0.0f, 3.0f, 0.0f }, 1.0f, isInfinite);
-    Capsule caps ({}, { 0.0f, 3.0f, 0.0f }, 1.0f);
-    Box box ({}, { 1.0f, 1.0f, 1.0f }, QuaternionIdentity());
-    Round_Box roundBox({}, { 1.0f, 1.0f, 1.0f }, QuaternionIdentity());
+    static Plane plane ({ 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f });
+    static Quad quad({}, Quaternion{0.f, 1.f, 0.f, 0.f}, { 1.0f, 2.0f });
+    static Sphere sphere ({}, 1.0f);
+    static Cylinder cyl ({}, { 0.0f, 3.0f, 0.0f }, 1.0f, isInfinite);
+    static Capsule caps ({}, { 0.0f, 3.0f, 0.0f }, 1.0f);
+    static Box box ({}, { 1.0f, 1.0f, 1.0f }, Quaternion{ 0.f, 1.f, 0.f, 1.f });
+    static Round_Box roundBox({}, { 1.0f, 1.0f, 1.0f }, QuaternionIdentity());
    
     float time = GetTime();
 
@@ -145,7 +145,8 @@ void Application::drawIntersection()
             break;
 
         case State::QUAD:
-            quad.center = { 2 * cosf(time), cosf(time), 2.5f * sinf(time) };
+            move(quad.center, quad.quaternion);
+            //quad.center = { 2 * cosf(time), cosf(time), 2.5f * sinf(time) };
             quad.drawIntersection(segment, interPt, interNormal);
             break;
 
@@ -167,7 +168,8 @@ void Application::drawIntersection()
             break;
 
         case State::BOX:
-            box.center = { 2 * sinf(time), cosf(time), sinf(time) };
+            //box.center = { 2 * sinf(time), cosf(time), sinf(time) };
+            move(box.center, box.quaternion);
             box.drawIntersection(segment, interPt, interNormal);
             break;
 
@@ -181,4 +183,43 @@ void Application::drawIntersection()
 
         default: break;
     }
+}
+
+void Application::move(Vector3& toMove, Quaternion& quaternion)
+{
+    Vector3 rotation = Vector3RotateByQuaternion(Vector3{ 0.f, 1.f, 0.f }, quaternion);
+
+    if (IsKeyDown(KEY_S))
+        toMove.z -= 0.1f;
+    else if (IsKeyDown(KEY_W))
+        toMove.z += 0.1f;
+
+    if (IsKeyDown(KEY_A))
+        toMove.x -= 0.1f;
+    else if (IsKeyDown(KEY_D))
+        toMove.x += 0.1f;
+
+    if (IsKeyDown(KEY_Q))
+        toMove.y -= 0.1f;
+    else if (IsKeyDown(KEY_E))
+        toMove.y += 0.1f;
+
+    // ROTATION
+
+    if (IsKeyDown(KEY_J))
+        rotation.x -= 0.1f;
+    else if (IsKeyDown(KEY_L))
+        rotation.x += 0.1f;
+
+    if (IsKeyDown(KEY_K))
+        rotation.z -= 0.1f;
+    else if (IsKeyDown(KEY_I))
+        rotation.z += 0.1f;
+
+    if (IsKeyDown(KEY_U))
+        rotation.y -= 0.1f;
+    else if (IsKeyDown(KEY_O))
+        rotation.y += 0.1f;
+
+    quaternion = QuaternionFromVector3ToVector3(Vector3{ 0.f, 1.f, 0.f }, rotation);
 }

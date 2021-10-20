@@ -60,7 +60,7 @@ bool Plane::Segment_Plane(const Segment& segment, Vector3& interPt, Vector3& int
 	
 	float T = (distance - dotProduct(segment.ptA, normal)) / dotAB_normal;
 
-	if (T <= 0 || T >= 1)
+	if (T < 0 || T > 1)
 		return false;
 
 	interPt = segment.ptA + AB * T;

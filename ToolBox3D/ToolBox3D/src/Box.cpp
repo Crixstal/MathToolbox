@@ -9,22 +9,15 @@ Box::Box(const Vector3& c, const Vector3& s, const Quaternion& q)
 
 void Box::myDrawBox(const Color& color)
 {
-	Vector3 i = Vector3RotateByQuaternion({1, 0, 0}, quaternion);
-	Vector3 j = Vector3RotateByQuaternion({0, 1, 0}, quaternion);
-	Vector3 k = Vector3RotateByQuaternion({0, 0, 1}, quaternion);
-
-	Quaternion qA = QuaternionFromAxisAngle({1, 0, 0}, PI / 2);
-	Quaternion qB = QuaternionFromAxisAngle({0, 0, 1}, PI / 2);
-
 	rlPushMatrix();
 	rlTranslatef(center.x, center.y, center.z);
 
-	Quad quad1 (i * size.x, qB, { size.x, size.y });
-	Quad quad2 (-i * size.x, qB, { size.x, size.y });
-	Quad quad3 (j * size.y, quaternion, { size.x, size.y });
-	Quad quad4 (-j * size.y, quaternion, { size.x, size.y });
-	Quad quad5 (k * size.z, qA, { size.x, size.y });
-	Quad quad6 (-k * size.z, qA, { size.x, size.y });
+	Quad quad1 = getRight();
+	Quad quad2 = getLeft();
+	Quad quad3 = getUp();
+	Quad quad4 = getBottom();
+	Quad quad5 = getFront();
+	Quad quad6 = getBack();
 
 	quad1.myDrawQuad(color);
 	quad2.myDrawQuad(color);
@@ -56,7 +49,7 @@ Quad Box::getRight() const
 	Quaternion qdQuaternion = QuaternionMultiply(quaternion, QuaternionFromAxisAngle({ 0.f, 0.f, 1.f }, -PI / 2));
 	Vector3 qdCenter = Vector3RotateByQuaternion((1.f, 0.f, 0.f) * size, quaternion) + center;
 
-	return { qdCenter, qdQuaternion, {size.x, size.z} };
+	return { qdCenter, qdQuaternion, {size.y, size.z} };
 }
 
 Quad Box::getLeft() const
@@ -64,7 +57,7 @@ Quad Box::getLeft() const
 	Quaternion qdQuaternion = QuaternionMultiply(quaternion, QuaternionFromAxisAngle({ 0.f, 0.f, 1.f }, PI / 2));
 	Vector3 qdCenter = Vector3RotateByQuaternion((-1.f, 0.f, 0.f) * size, quaternion) + center;
 
-	return { qdCenter, qdQuaternion, {size.x, size.z} };
+	return { qdCenter, qdQuaternion, {size.y, size.z} };
 }
 
 Quad Box::getFront() const
@@ -72,7 +65,7 @@ Quad Box::getFront() const
 	Quaternion qdQuaternion = QuaternionMultiply(quaternion, QuaternionFromAxisAngle({ 1.f, 0.f, 0.f }, PI / 2));
 	Vector3 qdCenter = Vector3RotateByQuaternion((0.f, 0.f, 1.f) * size, quaternion) + center;
 
-	return { qdCenter, qdQuaternion, {size.x, size.z} };
+	return { qdCenter, qdQuaternion, {size.x, size.y} };
 }
 
 Quad Box::getBack() const
@@ -80,7 +73,7 @@ Quad Box::getBack() const
 	Quaternion qdQuaternion = QuaternionMultiply(quaternion, QuaternionFromAxisAngle({ 1.f, 0.f, 0.f }, -PI / 2));
 	Vector3 qdCenter = Vector3RotateByQuaternion((0.f, 0.f, -1.f) * size, quaternion) + center;
 
-	return { qdCenter, qdQuaternion, {size.x, size.z} };
+	return { qdCenter, qdQuaternion, {size.x, size.y} };
 }
 
 Quad Box::getUp() const

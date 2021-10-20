@@ -26,7 +26,7 @@ void Quad::myDrawQuad(const Color& color)
     rlVertex3f(-1, 0, -1);
     rlVertex3f(-1, 0, 1);
     rlVertex3f(1, 0, 1);
-
+    
     rlVertex3f(-1, 0, -1);
     rlVertex3f(1, 0, 1);
     rlVertex3f(1, 0, -1);
@@ -43,7 +43,7 @@ bool Quad::isInQuad(const Vector3& point)
     Vector3 localPoint = point;
     localRef.globToLocPos(localRef, localPoint);
 
-    return (fabsf(localPoint.x) <= extension.x / 2) && (fabsf(localPoint.z) <= extension.y / 2);
+    return (fabsf(localPoint.x) <= extension.x) && (fabsf(localPoint.z) <= extension.y);
 }
 
 bool Quad::Segment_Quad(const Segment& segment, Vector3& interPt, Vector3& interNormal)
@@ -56,16 +56,6 @@ bool Quad::Segment_Quad(const Segment& segment, Vector3& interPt, Vector3& inter
         return false;
 
     return isInQuad(interPt);
-
-    /*Vector3 i = Vector3RotateByQuaternion({1.0f, 1.0f, 0.0f}, quaternion);
-    Vector3 j = Vector3RotateByQuaternion({ 0.0f, 0.0f, 1.0f }, quaternion);
-    Vector3 vect = interPt - center;
-
-    if (fabsf(dotProduct(i, vect)) > extension.x ||
-        fabsf(dotProduct(j, vect)) > extension.y)
-        return false;
-
-    return true;*/
 }
 
 void Quad::drawIntersection(const Segment& segment, Vector3& interPt, Vector3& interNormal, Color color)
