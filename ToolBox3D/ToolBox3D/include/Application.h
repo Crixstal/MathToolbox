@@ -21,7 +21,6 @@ struct Application
 		CAPSULE,
 		BOX,
 		ROUND_BOX,
-		BOUNCING_BALL
 	};
 
 	int stateChanger = 0;

@@ -44,9 +44,6 @@
     <ClInclude Include="include\Range.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\Oriented_Box.h">
-      <Filter>include</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -80,9 +77,6 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Range.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Oriented_Box.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

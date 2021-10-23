@@ -1,9 +1,10 @@
 #include "Sphere.h"
 
-Sphere::Sphere(const Vector3& c, const float& r)
+Sphere::Sphere(const Vector3& c, const float& r, const Quaternion& q)
 {
     center = c;
     radius = r;
+    quaternion = q;
 }
 
 Vector3 Sphere::getSphericalCoords(const float& theta, const float& phi)
@@ -23,6 +24,12 @@ void Sphere::myDrawSphere(const int& resLong, const int& resLat, const float& st
     rlPushMatrix();
 
     rlTranslatef(center.x, center.y, center.z);
+
+    Vector3 vect;
+    float angle;
+    QuaternionToAxisAngle(quaternion, &vect, &angle);
+    rlRotatef(angle * RAD2DEG, vect.x, vect.y, vect.z);
+
     rlScalef(radius, radius, radius);
     rlBegin(RL_QUADS);
 

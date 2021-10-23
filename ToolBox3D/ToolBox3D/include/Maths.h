@@ -96,12 +96,39 @@ inline Vector3 operator+(const Vector3& vecA, const Vector3& vecB)
 	};
 };
 
+inline Vector3 operator+(const Vector3& vec, const float& k)
+{
+	return {
+		k + vec.x,
+		k + vec.y,
+		k + vec.z
+	};
+};
+
+inline Vector3 operator+(const float& k, const Vector3& vec)
+{
+	return {
+		k + vec.x,
+		k + vec.y,
+		k + vec.z
+	};
+};
+
 inline Vector3 operator-(const Vector3& vecA, const Vector3& vecB)
 {
 	return {
 		vecA.x - vecB.x,
 		vecA.y - vecB.y,
 		vecA.z - vecB.z
+	};
+};
+
+inline Vector3 operator-(const Vector3& vec, const float& k)
+{
+	return {
+		k - vec.x,
+		k - vec.y,
+		k - vec.z
 	};
 };
 
@@ -120,5 +147,14 @@ inline Vector3 operator+=(Vector3& vecA, const Vector3& vecB)
 		vecA.x += vecB.x,
 		vecA.y += vecB.y,
 		vecA.z += vecB.z
+	};
+};
+
+inline Vector3 operator-=(Vector3& vecA, const Vector3& vecB)
+{
+	return {
+		vecA.x -= vecB.x,
+		vecA.y -= vecB.y,
+		vecA.z -= vecB.z
 	};
 };

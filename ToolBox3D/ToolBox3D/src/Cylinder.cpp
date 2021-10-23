@@ -1,11 +1,12 @@
 #include "Cylinder.h"
 
-Cylinder::Cylinder(const Vector3& P, const Vector3& Q, const float& r, const bool& infinite)
+Cylinder::Cylinder(const Vector3& P, const Vector3& Q, const float& r, const bool& infinite, const Quaternion& q)
 {
     ptP = P;
     ptQ = Q;
     radius = r;
     isInfinite = infinite;
+    quaternion = q;
 }
 
 void Cylinder::myDrawCylinder(const Color& color, const int& resLat, const float& startLat, const float& endLat)
@@ -23,6 +24,7 @@ void Cylinder::myDrawCylinder(const Color& color, const int& resLat, const float
     float angle;
     QuaternionToAxisAngle(QuaternionFromVector3ToVector3({ 0.0f, 1.0f, 0.0f }, normalize(PQ)), &vect, &angle);
     rlRotatef(angle * RAD2DEG, vect.x, vect.y, vect.z);
+
     rlScalef(radius, length, radius);
 
     rlBegin(RL_TRIANGLES);

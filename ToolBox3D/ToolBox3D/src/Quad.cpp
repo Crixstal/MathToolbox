@@ -35,15 +35,66 @@ void Quad::myDrawQuad(const Color& color)
     rlPopMatrix();
 }
 
+Vector3 Quad::getNearVertice(const Vector3& localPt, const Quad& quad)
+{
+    return {
+        localPt.x < 0.f ? -quad.extension.x : quad.extension.x,
+        0.f,
+        localPt.z < 0.f ? -quad.extension.y : quad.extension.y, };
+}
+
+Segment Quad::getNearEdge(const Vector3& externLocalPt)
+{
+    Segment nearestSeg;
+
+    if (externLocalPt.x < -extension.x / 2)
+        nearestSeg = { Vector3{-extension.x / 2, 0.f, extension.y / 2}, Vector3{-extension.x / 2, 0.f, -extension.y / 2} };
+
+    else if (externLocalPt.x > extension.x / 2)
+        nearestSeg = { Vector3{extension.x / 2, 0.f, extension.y / 2}, Vector3{extension.x / 2, 0.f, -extension.y / 2} };
+
+    else if (externLocalPt.z > extension.y / 2)
+        nearestSeg = { Vector3{-extension.x / 2, 0.f, -extension.y / 2}, Vector3{extension.x / 2, 0.f, -extension.y / 2} };
+
+    else if (externLocalPt.z > extension.y / 2)
+        nearestSeg = { Vector3{-extension.x / 2, 0.f, extension.y / 2}, Vector3{extension.x / 2, 0.f, extension.y / 2} };
+
+    return nearestSeg;
+}
+
 bool Quad::isInQuad(const Vector3& point)
 {
-    // Test in local referentiel to simplify calcul by only compare quad extension with point coordinates
-    Referential localRef (center, quaternion);
+    Referential localRef(center, quaternion);
 
     Vector3 localPoint = point;
     localRef.globToLocPos(localRef, localPoint);
 
     return (fabsf(localPoint.x) <= extension.x) && (fabsf(localPoint.z) <= extension.y);
+}
+
+bool Quad::isInQuad(const Vector3& point, const Quad& quad, Segment& nearestEgde1, Segment& nearestEgde2)
+{
+    // As the precedent method but stock the 3 nearest vertices of the quad from the point
+
+    Referential localRef(center, quaternion);
+
+    Vector3 localPoint = point;
+    localRef.globToLocPos(localRef, localPoint);
+
+    Vector3 nearestVertice = getNearVertice(localPoint, quad);
+    localRef.locToGlobPos(localRef, nearestVertice);
+
+    // Take a symetric point by change sign of X
+    nearestEgde1.ptA = nearestVertice;
+    nearestEgde1.ptB = getNearVertice(Vector3{ -localPoint.x - 0.001f, localPoint.y, localPoint.z }, quad);
+    localRef.locToGlobPos(localRef, nearestEgde1.ptB);
+
+    // Take a symetric point by change sign of X
+    nearestEgde2.ptA = nearestVertice;
+    nearestEgde2.ptB = getNearVertice(Vector3{localPoint.x, localPoint.y, -localPoint.z - 0.001f}, quad);
+    localRef.locToGlobPos(localRef, nearestEgde2.ptB);
+
+    return (fabsf(localPoint.x) <= quad.extension.x) && (fabsf(localPoint.z) <= quad.extension.y);
 }
 
 bool Quad::Segment_Quad(const Segment& segment, Vector3& interPt, Vector3& interNormal)

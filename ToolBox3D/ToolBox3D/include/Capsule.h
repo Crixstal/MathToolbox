@@ -14,6 +14,7 @@ struct Capsule
 
     void myDrawCapsule(const Color& color = GREEN);
     bool Segment_Capsule(const Segment& segment, Vector3& interPt, Vector3& interNormal);
+    bool Segment_Capsule(const Segment& segment, Vector3& interPt, Vector3& interNormal, bool& isOnCyl);
     void drawIntersection(const Segment& segment, Vector3& interPt, Vector3& interNormal, Color color = GREEN);
 };
 

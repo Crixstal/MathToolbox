@@ -9,18 +9,18 @@ Capsule::Capsule(const Vector3& P, const Vector3& Q, const float& r)
 
 void Capsule::myDrawCapsule(const Color& color)
 {
-    Cylinder caps(ptP, ptQ, radius, true);
+    Cylinder caps(ptP, ptQ, radius, true, QuaternionIdentity());
     caps.myDrawCylinder(color, 20, 0, 2 * PI);
 
-    Sphere sphere1(ptP, radius);
-    Sphere sphere2(ptQ, radius);
+    Sphere sphere1(ptP, radius, QuaternionIdentity());
+    Sphere sphere2(ptQ, radius, QuaternionIdentity());
     sphere1.myDrawSphere(20, 20, 0, 0, 2 * PI, PI, color);
     sphere2.myDrawSphere(20, 20, 0, 0, 2 * PI, PI, color);
 }
 
 bool Capsule::Segment_Capsule(const Segment& segment, Vector3& interPt, Vector3& interNormal)
 {
-    Cylinder caps(ptP, ptQ, radius, false);
+    Cylinder caps(ptP, ptQ, radius, false, QuaternionIdentity());
     if (!caps.Segment_CylinderInfinite(segment, interPt, interNormal))
         interPt = segment.ptA;
 
@@ -29,18 +29,48 @@ bool Capsule::Segment_Capsule(const Segment& segment, Vector3& interPt, Vector3&
 
     if (dotProduct(PM, PQ) < 0 || dotProduct(PM, PQ) > dotProduct(PQ, PQ))
     {
-        Sphere caps1(ptP, radius);
-        Sphere caps2(ptQ, radius);
+        Sphere caps1(ptP, radius, QuaternionIdentity());
+        Sphere caps2(ptQ, radius, QuaternionIdentity());
 
         if (caps1.Segment_Sphere(segment, interPt, interNormal))
             return true;
 
         if (caps2.Segment_Sphere(segment, interPt, interNormal))
-                return true;
+            return true;
     }
 
     else
         return true;
+
+    return false;
+}
+
+bool Capsule::Segment_Capsule(const Segment& segment, Vector3& interPt, Vector3& interNormal, bool& isOnCyl)
+{
+    Cylinder caps(ptP, ptQ, radius, false, QuaternionIdentity());
+    if (!caps.Segment_CylinderInfinite(segment, interPt, interNormal))
+        interPt = segment.ptA;
+
+    Vector3 PQ = vecFromPt(ptP, ptQ);
+    Vector3 PM = vecFromPt(ptP, interPt);
+
+    if (dotProduct(PM, PQ) < 0 || dotProduct(PM, PQ) > dotProduct(PQ, PQ))
+    {
+        Sphere caps1(ptP, radius, QuaternionIdentity());
+        Sphere caps2(ptQ, radius, QuaternionIdentity());
+
+        if (caps1.Segment_Sphere(segment, interPt, interNormal))
+            return true;
+
+        if (caps2.Segment_Sphere(segment, interPt, interNormal))
+            return true;
+    }
+
+    else
+    {
+        isOnCyl = true;
+        return true;
+    }
 
     return false;
 }

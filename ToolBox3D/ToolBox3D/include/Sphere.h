@@ -6,8 +6,9 @@ struct Sphere
 {
 	Vector3 center;
 	float radius;
+	Quaternion quaternion;
 
-	Sphere(const Vector3& c, const float& r);
+	Sphere(const Vector3& c, const float& r, const Quaternion& q);
 
 	Vector3 getSphericalCoords(const float& theta, const float& phi);
 	void myDrawSphere(const int& resLong, const int& resLat, const float& startLong = 0, const float& startLat = 0, const float& endLong = 2 * PI, const float& endLat = PI, const Color& color = GREEN);

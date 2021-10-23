@@ -55,7 +55,7 @@ void Application::changeMode()
     {
         ++stateChanger;
 
-        if (stateChanger > 7)
+        if (stateChanger > 6)
             stateChanger = 0;
     }
 
@@ -64,7 +64,7 @@ void Application::changeMode()
         --stateChanger;
 
         if (stateChanger < 0)
-            stateChanger = 7;
+            stateChanger = 6;
     }
 
     if (IsKeyPressed(KEY_UP))
@@ -113,10 +113,6 @@ void Application::changeMode()
             DrawText("Round box", 450, 10, 20, BLACK);
             break;
 
-        case State::BOUNCING_BALL:
-            DrawText("Bouncing ball", 450, 10, 20, BLACK);
-            break;
-
         default: break;
     }
 }
@@ -128,11 +124,11 @@ void Application::drawIntersection()
     Segment segment = { {-2.0f, -2.0f, -1.0f}, {2.0f, 2.0f, 1.0f} };
     static Plane plane ({ 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f });
     static Quad quad({}, Quaternion{0.f, 1.f, 0.f, 0.f}, { 1.0f, 2.0f });
-    static Sphere sphere ({}, 1.0f);
-    static Cylinder cyl ({}, { 0.0f, 3.0f, 0.0f }, 1.0f, isInfinite);
+    static Sphere sphere ({}, 1.0f, QuaternionIdentity());
+    Cylinder cyl ({}, { 0.0f, 3.0f, 0.0f }, 1.0f, isInfinite, QuaternionIdentity());
     static Capsule caps ({}, { 0.0f, 3.0f, 0.0f }, 1.0f);
-    static Box box ({}, { 1.0f, 1.0f, 1.0f }, Quaternion{ 0.f, 1.f, 0.f, 1.f });
-    static Round_Box roundBox({}, { 1.0f, 1.0f, 1.0f }, QuaternionIdentity());
+    static Box box ({}, { 1.0f, 1.0f, 1.0f }, QuaternionIdentity());
+    static Round_Box roundBox({}, { 1.0f, 1.0f, 1.0f }, QuaternionIdentity(), 0.5f);
    
     float time = GetTime();
 
@@ -175,10 +171,8 @@ void Application::drawIntersection()
 
         case State::ROUND_BOX:
             //roundBox.center = { 2 * cosf(time), cosf(time), 2.5f * sinf(time) };
+            move(roundBox.center, roundBox.quaternion);
             roundBox.drawIntersection(segment, interPt, interNormal);
-            break;
-
-        case State::BOUNCING_BALL:
             break;
 
         default: break;
