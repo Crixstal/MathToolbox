@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{96ec4cbd-5269-4e59-ab71-c50b162cc0cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{f0b30399-7992-4212-b0b3-4145ba194385}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\Application.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Box.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Capsule.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Cylinder.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Maths.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Plane.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Quad.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Range.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Referential.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Round_Box.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Sphere.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Application.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Box.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Capsule.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Cylinder.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Plane.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Quad.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Range.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Referential.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Round_Box.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sphere.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

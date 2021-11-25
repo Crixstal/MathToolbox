@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="source">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="include\Collisions">
+      <UniqueIdentifier>{beb6a761-5c36-4e80-9975-05b38a0c35d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\Collisions">
+      <UniqueIdentifier>{27bbea73-2f87-494b-8bfe-555b3d3935ee}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source\Collisions\Box.cpp">
+      <Filter>source\Collisions</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Collisions\Capsule.cpp">
+      <Filter>source\Collisions</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Collisions\Cylinder.cpp">
+      <Filter>source\Collisions</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Collisions\Plane.cpp">
+      <Filter>source\Collisions</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Collisions\Quad.cpp">
+      <Filter>source\Collisions</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Collisions\Round_Box.cpp">
+      <Filter>source\Collisions</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Collisions\Sphere.cpp">
+      <Filter>source\Collisions</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Range.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Referential.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\Collisions\Box.h">
+      <Filter>include\Collisions</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Collisions\Capsule.h">
+      <Filter>include\Collisions</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Collisions\Cylinder.h">
+      <Filter>include\Collisions</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Collisions\Plane.h">
+      <Filter>include\Collisions</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Collisions\Quad.h">
+      <Filter>include\Collisions</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Collisions\Round_Box.h">
+      <Filter>include\Collisions</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Collisions\Sphere.h">
+      <Filter>include\Collisions</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Range.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Referential.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Definitions.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vector3.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Mat4.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Quaternion.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,28 @@
+Chaque fichier .h dans le dossier include contient :
+- une structure
+- les prototypes de fonction
+
+Chaque fichier .cpp dans le dossier src contient au moins 4 fonctions :
+- un constructeur
+- une fonction pour dessiner une forme 3D ("void myDraw...")
+- une fonction pour détecter lorsqu'il y a collision entre un segment et une forme 3D ("bool Segment_...")
+- une fonction pour dessiner la collision (affichage du point d'intersection, changement de couleur, affichage de la normale / "void drawIntersection")
+
+Les fonctions concernant une forme 3D sont dans le fichier .cpp/.h correspondant : les fonctions pour la sphere sont dans Sphere.cpp/Sphere.h
+
+Les formes 3D traités sont :
+- le plan
+- le quad
+- la sphere
+- le cylindre fini et infini
+- la box 
+
+Maths.h contient :
+- la structure Segment
+- dotProduct, produit scalaire entre deux vecteurs
+- vectorMagnitude, la taille d'un vecteur
+- normalize, pour normaliser un vecteur
+- vectorProduct, produit vectoriel entre deux vecteurs
+- vecFromPt pour calculer le vecteur entre deux points
+
+La round box et la scene avec la balle qui rebondi n'ont pas pu être achevée, mais le dessin de la round box était en cours
