@@ -44,6 +44,9 @@
     <ClCompile Include="source\Referential.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="source\main.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Collisions\Box.h">

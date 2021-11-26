@@ -1,5 +1,7 @@
 #include "Sphere.h"
 
+#include "Vector3.h"
+
 Sphere::Sphere(const vec3& c, const float& r, const quat& q)
 {
     center = c;

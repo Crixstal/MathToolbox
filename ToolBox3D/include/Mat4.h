@@ -2,6 +2,29 @@
 
 #include "Definitions.h"
 
+#include "Vector3.h"
+
+
+inline mat4 operator*(const mat4& a, const mat4& b)
+{
+    mat4 result = { 0.f };
+
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+            float sum = 0.f;
+            for (int k = 0; k < 4; k++)
+                sum += a.c[i].e[k] * b.c[k].e[j];
+
+            result.c[i].e[j] = sum;
+        }
+    }
+
+    return result;
+}
+
+
 inline mat4 matIdentity()
 {
     return {
@@ -232,22 +255,16 @@ inline mat4 matInvert(const mat4& mat)
     };
 }
 
-
-inline mat4 operator*(const mat4& a, const mat4& b)
+inline vec3 modelMatrixToPosition(const mat4& matrix)
 {
-    mat4 result = { 0.f };
+    return vec3(matrix.e[3], matrix.e[7], matrix.e[11]);
+}
 
-    for (int i = 0; i < 4; i++)
-    {
-        for (int j = 0; j < 4; j++)
-        {
-            float sum = 0.f;
-            for (int k = 0; k < 4; k++)
-                sum += a.c[i].e[k] * b.c[k].e[j];
-
-            result.c[i].e[j] = sum;
-        }
-    }
-
-    return result;
+inline vec3 modelMatrixToScale(const mat4& matrix)
+{
+    return (
+        vecMagnitude({ matrix.e[0], matrix.e[4], matrix.e[8] }),
+        vecMagnitude({ matrix.e[1], matrix.e[5], matrix.e[9] }),
+        vecMagnitude({ matrix.e[2], matrix.e[6], matrix.e[10] })
+        );
 }

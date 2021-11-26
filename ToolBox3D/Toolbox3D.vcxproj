@@ -150,6 +150,7 @@
     <ClCompile Include="source\Collisions\Quad.cpp" />
     <ClCompile Include="source\Collisions\Round_Box.cpp" />
     <ClCompile Include="source\Collisions\Sphere.cpp" />
+    <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\Range.cpp" />
     <ClCompile Include="source\Referential.cpp" />
   </ItemGroup>

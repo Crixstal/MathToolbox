@@ -2,6 +2,92 @@
 
 #include "Definitions.h"
 
+#include "Mat4.h" //  already include Vector3.h
+
+
+inline quat operator+(const quat& q1, const quat& q2)
+{
+    return {
+        q1.x + q2.x,
+        q1.y + q2.y,
+        q1.z + q2.z,
+        q1.w + q2.w
+    };
+}
+inline quat operator+(const quat& q, const float& k)
+{
+    return {
+        q.x + k,
+        q.y + k,
+        q.z + k,
+        q.w + k
+    };
+}
+
+inline quat operator-(const quat& q1, const quat& q2)
+{
+    return {
+        q1.x - q2.x,
+        q1.y - q2.y,
+        q1.z - q2.z,
+        q1.w - q2.w
+    };
+}
+inline quat operator-(const quat& q, const float& k)
+{
+    return {
+        q.x - k,
+        q.y - k,
+        q.z - k,
+        q.w - k
+    };
+}
+
+inline quat operator*(const quat& quat1, const quat& quat2)
+{
+    quat result = quat(0.f, 0.f, 0.f, 0.f);
+
+    float qax = quat1.x, qay = quat1.y, qaz = quat1.z, qaw = quat1.w;
+    float qbx = quat2.x, qby = quat2.y, qbz = quat2.z, qbw = quat2.w;
+
+    result.x = qax * qbw + qaw * qbx + qay * qbz - qaz * qby;
+    result.y = qay * qbw + qaw * qby + qaz * qbx - qax * qbz;
+    result.z = qaz * qbw + qaw * qbz + qax * qby - qay * qbx;
+    result.w = qaw * qbw - qax * qbx - qay * qby - qaz * qbz;
+
+    return result;
+}
+inline quat operator*(const quat& q, const float& k)
+{
+    quat result = { 0 };
+
+    float qax = q.x, qay = q.y, qaz = q.z, qaw = q.w;
+
+    return {
+        qax * k + qaw * k + qay * k - qaz * k,
+        qay * k + qaw * k + qaz * k - qax * k,
+        qaz * k + qaw * k + qax * k - qay * k,
+        qaw * k - qax * k - qay * k - qaz * k
+    };
+}
+
+inline quat operator/(const quat& q1, const quat& q2)
+{
+    return {
+        q1.x / q2.x,
+        q1.y / q2.y,
+        q1.z / q2.z,
+        q1.w / q2.w
+    };
+}
+
+inline quat operator*=(quat& quat1, const quat& quat2)
+{
+    quat1 = quat1 * quat2;
+    return quat1;
+}
+
+
 inline quat quatIdentity()
 {
     return { 0.f, 0.f, 0.f, 1.f };
@@ -197,21 +283,21 @@ inline quat quatFromVector3ToVector3(const vec3& from, const vec3& to)
     return quatNormalize(result);
 }
 
-inline quat quatFromAxisAngle(vec3& axis, float& angle)
+inline quat quatFromAxisAngle(const vec3& axis, float angle)
 {
     quat result = { 0.0f, 0.0f, 0.0f, 1.0f };
 
     if (vecMagnitude(axis) != 0.0f)
         angle *= 0.5f;
 
-    axis = normalize(axis);
+    vec3 newAxis = normalize(axis);
 
     float sinres = sinf(angle);
     float cosres = cosf(angle);
 
-    result.x = axis.x * sinres;
-    result.y = axis.y * sinres;
-    result.z = axis.z * sinres;
+    result.x = newAxis.x * sinres;
+    result.y = newAxis.y * sinres;
+    result.z = newAxis.z * sinres;
     result.w = cosres;
 
     return quatNormalize(result);
@@ -265,85 +351,23 @@ inline vec3 vec3Unproject(const vec3& source, const mat4& projection, const mat4
     };
 }
 
-
-inline quat operator+(const quat& q1, const quat& q2)
+inline vec3 modelMatrixToRotation(mat4 matrix)
 {
-    return {
-        q1.x + q2.x,
-        q1.y + q2.y,
-        q1.z + q2.z,
-        q1.w + q2.w
-    };
-}
-inline quat operator+(const quat& q, const float& k)
-{
-    return {
-        q.x + k,
-        q.y + k,
-        q.z + k,
-        q.w + k
-    };
-}
+    matrix.e[3] = 0.f;
+    matrix.e[7] = 0.f;
+    matrix.e[11] = 0.f;
 
-inline quat operator-(const quat& q1, const quat& q2)
-{
-    return {
-        q1.x - q2.x,
-        q1.y - q2.y,
-        q1.z - q2.z,
-        q1.w - q2.w
-    };
-}
-inline quat operator-(const quat& q, const float& k)
-{
-    return {
-        q.x - k,
-        q.y - k,
-        q.z - k,
-        q.w - k
-    };
-}
+    vec3 scale = modelMatrixToScale(matrix);
 
-inline quat operator*(const quat& quat1, const quat& quat2)
-{
-    quat result = quat(0.f, 0.f, 0.f, 0.f);
+    matrix.e[0] /= scale.x;
+    matrix.e[4] /= scale.x;
+    matrix.e[8] /= scale.x;
+    matrix.e[1] /= scale.y;
+    matrix.e[5] /= scale.y;
+    matrix.e[9] /= scale.y;
+    matrix.e[2] /= scale.z;
+    matrix.e[6] /= scale.z;
+    matrix.e[10] /= scale.z;
 
-    float qax = quat1.x, qay = quat1.y, qaz = quat1.z, qaw = quat1.w;
-    float qbx = quat2.x, qby = quat2.y, qbz = quat2.z, qbw = quat2.w;
-
-    result.x = qax * qbw + qaw * qbx + qay * qbz - qaz * qby;
-    result.y = qay * qbw + qaw * qby + qaz * qbx - qax * qbz;
-    result.z = qaz * qbw + qaw * qbz + qax * qby - qay * qbx;
-    result.w = qaw * qbw - qax * qbx - qay * qby - qaz * qbz;
-
-    return result;
-}
-inline quat operator*(const quat& q, const float& k)
-{
-    quat result = { 0 };
-
-    float qax = q.x, qay = q.y, qaz = q.z, qaw = q.w;
-
-    return {
-        qax * k + qaw * k + qay * k - qaz * k,
-        qay * k + qaw * k + qaz * k - qax * k,
-        qaz * k + qaw * k + qax * k - qay * k,
-        qaw * k - qax * k - qay * k - qaz * k
-    };
-}
-
-inline quat operator/(const quat& q1, const quat& q2)
-{
-    return {
-        q1.x / q2.x,
-        q1.y / q2.y,
-        q1.z / q2.z,
-        q1.w / q2.w
-    };
-}
-
-inline quat operator*=(quat& quat1, const quat& quat2)
-{
-    quat1 = quat1 * quat2;
-    return quat1;
+    return rotateByQuat({ 1.f, 0.f, 0.f }, quaternionFromMatrix(matrix));
 }

@@ -1,5 +1,7 @@
 #include "Capsule.h"
 
+#include "Quaternion.h" // already include Mat4 which include Vector3
+
 Capsule::Capsule(const vec3& P, const vec3& Q, const float& r)
 {
     ptP = P;

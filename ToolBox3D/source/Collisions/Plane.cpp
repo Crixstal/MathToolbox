@@ -1,5 +1,7 @@
 #include "Plane.h"
 
+#include "Vector3.h"
+
 Plane::Plane(const vec3& n, const float& d)
 {
 	normal = normalize(n);

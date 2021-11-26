@@ -2,10 +2,6 @@
 
 #include <cmath>
 
-#include "Vector3.h"
-#include "Quaternion.h"
-#include "Mat4.h"
-
 constexpr float TAU = 6.28318530717958647692f;
 constexpr float PI = 3.14159265358979323846f;
 constexpr float PIO4 = PI / 4.f;

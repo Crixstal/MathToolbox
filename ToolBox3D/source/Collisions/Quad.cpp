@@ -1,6 +1,8 @@
 #include "Quad.h"
 #include "Plane.h"
 
+#include "Vector3.h"
+
 Quad::Quad(const vec3& c, const quat& q, const vec2& e)
 {
     center = c;

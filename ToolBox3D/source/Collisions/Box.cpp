@@ -1,6 +1,8 @@
 #include "Box.h"
 #include "Round_Box.h"
 
+#include "Quaternion.h" // already include Mat4 which include Vector3
+
 Box::Box(const vec3& c, const vec3& s, const quat& q)
 {
 	center = c;
